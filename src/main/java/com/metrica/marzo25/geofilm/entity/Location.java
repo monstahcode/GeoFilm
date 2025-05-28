@@ -29,10 +29,10 @@ public class Location {
     @Column(name = "fictional_address", nullable = false, length = 50)
     private String fictionalAddress;
 
-    @Column(name = "latitude", precision = 10, scale = 8)
+    @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "longitude", precision = 11, scale = 8)
+    @Column(name = "longitude")
     private Double longitude;
 
     // Relación muchos a muchos con User (usuarios que tienen esta localización como favorita)
