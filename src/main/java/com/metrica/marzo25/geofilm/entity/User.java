@@ -1,9 +1,19 @@
 package com.metrica.marzo25.geofilm.entity;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 // Entidad User
 @Entity
@@ -39,7 +49,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.createdAt = LocalDateTime.now();
         this.favoriteLocations = new HashSet<>();
     }
 
@@ -93,10 +102,5 @@ public class User {
     public void removeFavoriteLocation(Location location) {
         this.favoriteLocations.remove(location);
         location.getFavoriteByUsers().remove(this);
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
     }
 }

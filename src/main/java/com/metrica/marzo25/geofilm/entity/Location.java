@@ -1,9 +1,16 @@
 package com.metrica.marzo25.geofilm.entity;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "location")
@@ -38,16 +45,12 @@ public class Location {
     public Location(String name, String address, String city, String country) {
         this.name = name;
         this.address = address;
-        this.city = city;
-        this.country = country;
-        this.createdAt = LocalDateTime.now();
     }
 
     public Location(String name, Double latitude, Double longitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.createdAt = LocalDateTime.now();
     }
 
     // Getters y Setters
@@ -97,10 +100,5 @@ public class Location {
 
     public void setFavoriteByUsers(Set<User> favoriteByUsers) {
         this.favoriteByUsers = favoriteByUsers;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
     }
 }
