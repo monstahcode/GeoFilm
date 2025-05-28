@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 package com.metrica.marzo25.geofilm.entity;
 
 import java.util.HashSet;
@@ -104,4 +102,3 @@ public class Location {
         this.favoriteByUsers = favoriteByUsers;
     }
 }
->>>>>>> Stashed changes
