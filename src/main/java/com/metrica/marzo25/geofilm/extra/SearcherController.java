@@ -11,17 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api/v1/media")
 @CrossOrigin(origins = "*")
 public class SearcherController {
 
-	@GetMapping
-    public List<Media> search(@RequestParam String query) throws IOException {
-        return Searcher.searchIdsWithName(query);
-    }
-	
-	@GetMapping("/id/{id}")
-    public List<Media> searchById(@PathVariable String id) throws IOException {
-        return Searcher.searchIdsWithName(id);
+	@GetMapping("/name/{name}")
+    public List<Media> searchByName(@PathVariable String name) throws IOException {
+        return Searcher.searchIdsWithName(name);
     }
 }
