@@ -24,13 +24,12 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        Optional<User> existingUserByUsername = userRepository.findByUsername(request.getUsername());
-        if (existingUserByUsername.isPresent()) {
+        Optional<User> existing = userRepository.findByUsername(request.getUsername());
+        if (existing.isPresent()) {
             return new AuthResponse(false, "El nombre de usuario ya existe");
         }
-
-        Optional<User> existingUserByEmail = userRepository.findByEmail(request.getEmail());
-        if (existingUserByEmail.isPresent()) {
+        existing = userRepository.findByUsername(request.getUsername());
+        if (existing.isPresent()) {
             return new AuthResponse(false, "El email ya está registrado");
         }
 
