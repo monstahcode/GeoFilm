@@ -28,7 +28,7 @@ public class AuthService {
         if (existing.isPresent()) {
             return new AuthResponse(false, "El nombre de usuario ya existe");
         }
-        existing = userRepository.findByUsername(request.getUsername());
+        existing = userRepository.findByEmail(request.getEmail());
         if (existing.isPresent()) {
             return new AuthResponse(false, "El email ya está registrado");
         }
