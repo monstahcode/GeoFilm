@@ -1,5 +1,6 @@
 package com.metrica.marzo25.geofilm.service;
 
+import com.metrica.marzo25.geofilm.dto.request.LoginRequest;
 import com.metrica.marzo25.geofilm.dto.request.RegisterRequest;
 import com.metrica.marzo25.geofilm.dto.response.AuthResponse;
 import com.metrica.marzo25.geofilm.dto.response.UserResponse;
@@ -22,13 +23,32 @@ public class AuthService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    
+    public AuthResponse login(LoginRequest request) {
+    	Optional<User> existing = userRepository.findByEmail(request.getEmail());
+    	if(!existing.isPresent()) {
+    		return new AuthResponse(false, "El email especificado no existe");
+    	}
+    	
+    	User foundUser = existing.get();
+    	
+    	if(passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
+    		UserResponse userResponse = new UserResponse(
+    				foundUser.getId(),
+    				foundUser.getUsername(),
+    				foundUser.getEmail()
+            );
+
+            return new AuthResponse(true, "Usuario registrado exitosamente", userResponse);
+    	} else return new AuthResponse(false, "Contraseña incorrecta");
+    }
 
     public AuthResponse register(RegisterRequest request) {
         Optional<User> existing = userRepository.findByUsername(request.getUsername());
         if (existing.isPresent()) {
             return new AuthResponse(false, "El nombre de usuario ya existe");
         }
-        existing = userRepository.findByUsername(request.getUsername());
+        existing = userRepository.findByEmail(request.getEmail());
         if (existing.isPresent()) {
             return new AuthResponse(false, "El email ya está registrado");
         }
