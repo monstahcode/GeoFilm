@@ -17,6 +17,6 @@ public class SearcherController {
 
 	@GetMapping("/name/{name}")
     public List<Media> searchByName(@PathVariable String name) throws IOException {
-        return Searcher.searchIdsWithName(name);
+        return Searcher.searchMediaWithName(name);
     }
 }
