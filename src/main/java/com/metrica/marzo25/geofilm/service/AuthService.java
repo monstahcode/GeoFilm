@@ -39,7 +39,7 @@ public class AuthService {
     				foundUser.getEmail()
             );
 
-            return new AuthResponse(true, "Usuario registrado exitosamente", userResponse);
+            return new AuthResponse(true, "Usuario logeado exitosamente", userResponse);
     	} else return new AuthResponse(false, "Contraseña incorrecta");
     }
 
