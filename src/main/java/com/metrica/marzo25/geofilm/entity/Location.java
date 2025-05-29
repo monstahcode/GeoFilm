@@ -52,53 +52,66 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
+    
     // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+   
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public Double getLatitude() {
-        return latitude;
-    }
+	public String getFictionalAddress() {
+		return fictionalAddress;
+	}
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
+	public void setFictionalAddress(String fictionalAddress) {
+		this.fictionalAddress = fictionalAddress;
+	}
 
-    public Double getLongitude() {
-        return longitude;
-    }
+	public Double getLatitude() {
+		return latitude;
+	}
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
 
-    public Set<User> getFavoriteByUsers() {
-        return favoriteByUsers;
-    }
+	public Double getLongitude() {
+		return longitude;
+	}
 
-    public void setFavoriteByUsers(Set<User> favoriteByUsers) {
-        this.favoriteByUsers = favoriteByUsers;
-    }
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Set<User> getFavoriteByUsers() {
+		return favoriteByUsers;
+	}
+
+	public void setFavoriteByUsers(Set<User> favoriteByUsers) {
+		this.favoriteByUsers = favoriteByUsers;
+	}
+	
+    
+    
+    
 }
