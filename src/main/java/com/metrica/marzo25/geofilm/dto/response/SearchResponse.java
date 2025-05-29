@@ -5,5 +5,6 @@ public class SearchResponse {
     }
 
     public boolean isSuccess() {
+    	return false;
     }
 }
