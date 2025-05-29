@@ -103,4 +103,12 @@ public class User {
         this.favoriteLocations.remove(location);
         location.getFavoriteByUsers().remove(this);
     }
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", favoriteLocations=" + favoriteLocations + "]";
+	}
+    
+    
 }
