@@ -1,8 +1,9 @@
 package com.metrica.marzo25.geofilm.extra;
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException, Exception {
 		String busca = "guardians of the galaxy";
 		
 		System.out.println("Buscando " + busca + "...");
@@ -17,6 +18,13 @@ public class Main {
 		java.util.Arrays.stream(list.get(0).getScrapper().getLocations()).forEach(System.out::println);
 		System.out.println("\ntoString() tras scrappear localizaciones:\n" + list.get(0).toString());
 		
-		MediaLocation a = new MediaLocation("a", "a");
+		System.out.println("\nBuscando coordenadas:");
+		
+		for(MediaLocation m : list.get(0).getScrapper().getLocations()) {
+			m.getCoordenates();
+		}
+		System.out.println("Tras coger coordenadas");
+		java.util.Arrays.stream(list.get(0).getScrapper().getLocations()).forEach(System.out::println);
+		
 	}
 }

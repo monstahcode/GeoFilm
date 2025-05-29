@@ -66,7 +66,7 @@ public class Media {
 		}
 		
 		private MediaLocation[] fetchLocations() throws IOException, InterruptedException {
-			List<Location> result = new ArrayList<>();
+			List<MediaLocation> result = new ArrayList<>();
 			//Document doc = Jsoup.connect(String.format(IMDB_LOC_FORMAT, Media.this.id)).get();
 			Document doc = SeleniumUtil.getInstance().getExpandedLocationDocument(Media.this.id);
 			
@@ -76,7 +76,7 @@ public class Media {
 				if (nextElem != null)
 					filmLoc = nextElem.text();
 
-				result.add(new Location(elem.text(), filmLoc));
+				result.add(new MediaLocation(elem.text(), filmLoc));
 			}
 			
 			if(!result.isEmpty()) result.remove(result.size()-1);
