@@ -7,7 +7,7 @@ public class Main {
 		String busca = "guardians of the galaxy";
 		
 		System.out.println("Buscando " + busca + "...");
-		List<Media> list = Searcher.searchIdsWithName(busca);
+		List<Media> list = Searcher.searchMediaWithName(busca);
 		System.out.println("toString() primer resultado sin scrappear:\n" + list.get(0).toString());
 		
 		System.out.println("\nBuscando el plot:");
