@@ -1,13 +1,13 @@
 package com.metrica.marzo25.geofilm.dto.request;
 
-public class SearchRequest {
+public class SearchRequestDTO {
     private String query;
     private String type;
 
-    public SearchRequest() {
+    public SearchRequestDTO() {
     }
 
-    public SearchRequest(String query, String type) {
+    public SearchRequestDTO(String query, String type) {
         this.query = query;
         this.type = type;
     }

@@ -1,14 +1,14 @@
 package com.metrica.marzo25.geofilm.dto.response;
 
-public class UserResponse {
+public class UserResponseDTO {
 
     private Long id;
     private String username;
     private String email;
 
-    public UserResponse() {}
+    public UserResponseDTO() {}
 
-    public UserResponse(Long id, String username, String email) {
+    public UserResponseDTO(Long id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;

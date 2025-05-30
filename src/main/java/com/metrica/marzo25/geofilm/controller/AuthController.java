@@ -1,8 +1,8 @@
 package com.metrica.marzo25.geofilm.controller;
 
-import com.metrica.marzo25.geofilm.dto.request.LoginRequest;
-import com.metrica.marzo25.geofilm.dto.request.RegisterRequest;
-import com.metrica.marzo25.geofilm.dto.response.AuthResponse;
+import com.metrica.marzo25.geofilm.dto.request.LoginRequestDTO;
+import com.metrica.marzo25.geofilm.dto.request.RegisterRequestDTO;
+import com.metrica.marzo25.geofilm.dto.response.AuthResponseDTO;
 import com.metrica.marzo25.geofilm.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +21,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody RegisterRequestDTO request) {
         return authService.register(request);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         return authService.login(request);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<AuthResponse> logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<AuthResponseDTO> logout(@RequestHeader("Authorization") String token) {
         return authService.logout(token);
     }
 }

@@ -1,7 +1,7 @@
 package com.metrica.marzo25.geofilm.controller;
 
-import com.metrica.marzo25.geofilm.dto.request.SearchRequest;
-import com.metrica.marzo25.geofilm.dto.response.SearchResponse;
+import com.metrica.marzo25.geofilm.dto.request.SearchRequestDTO;
+import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
 import com.metrica.marzo25.geofilm.service.SearchService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +23,16 @@ public class SearchController {
     }
 
     @PostMapping("/movies")
-    public ResponseEntity<SearchResponse> searchMovies(@RequestBody SearchRequest request) {
+    public ResponseEntity<SearchResponseDTO> searchMovies(@RequestBody SearchRequestDTO request) {
         try {
-            SearchResponse response = searchService.searchMovies(request);
+            SearchResponseDTO response = searchService.searchMovies(request);
             if (response.isSuccess()) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         } catch (Exception e) {
-            SearchResponse errorResponse = new SearchResponse(false, "Error interno del servidor");
+            SearchResponseDTO errorResponse = new SearchResponseDTO(false, "Error interno del servidor");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }

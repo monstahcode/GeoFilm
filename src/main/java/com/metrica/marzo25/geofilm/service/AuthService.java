@@ -1,9 +1,9 @@
 package com.metrica.marzo25.geofilm.service;
 
-import com.metrica.marzo25.geofilm.dto.request.LoginRequest;
-import com.metrica.marzo25.geofilm.dto.request.RegisterRequest;
-import com.metrica.marzo25.geofilm.dto.response.AuthResponse;
-import com.metrica.marzo25.geofilm.dto.response.UserResponse;
+import com.metrica.marzo25.geofilm.dto.request.LoginRequestDTO;
+import com.metrica.marzo25.geofilm.dto.request.RegisterRequestDTO;
+import com.metrica.marzo25.geofilm.dto.response.AuthResponseDTO;
+import com.metrica.marzo25.geofilm.dto.response.UserResponseDTO;
 import com.metrica.marzo25.geofilm.entity.User;
 import com.metrica.marzo25.geofilm.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -26,45 +26,45 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<AuthResponse> login(LoginRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(LoginRequestDTO request) {
         try {
             Optional<User> existing = userRepository.findByEmail(request.getEmail());
             if (!existing.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponse(false, "El email especificado no existe"));
+                        .body(new AuthResponseDTO(false, "El email especificado no existe"));
             }
 
             User foundUser = existing.get();
 
             if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
-                UserResponse userResponse = new UserResponse(
+                UserResponseDTO userResponse = new UserResponseDTO(
                         foundUser.getId(),
                         foundUser.getUsername(),
                         foundUser.getEmail()
                 );
-                return ResponseEntity.ok(new AuthResponse(true, "Usuario logeado exitosamente", userResponse));
+                return ResponseEntity.ok(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponse(false, "Contraseña incorrecta"));
+                        .body(new AuthResponseDTO(false, "Contraseña incorrecta"));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new AuthResponse(false, "Error interno del servidor"));
+                    .body(new AuthResponseDTO(false, "Error interno del servidor"));
         }
     }
 
-    public ResponseEntity<AuthResponse> register(RegisterRequest request) {
+    public ResponseEntity<AuthResponseDTO> register(RegisterRequestDTO request) {
         try {
             Optional<User> existing = userRepository.findByUsername(request.getUsername());
             if (existing.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponse(false, "El nombre de usuario ya existe"));
+                        .body(new AuthResponseDTO(false, "El nombre de usuario ya existe"));
             }
 
             existing = userRepository.findByEmail(request.getEmail());
             if (existing.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponse(false, "El email ya está registrado"));
+                        .body(new AuthResponseDTO(false, "El email ya está registrado"));
             }
 
             User newUser = new User(
@@ -75,23 +75,23 @@ public class AuthService {
 
             User savedUser = userRepository.save(newUser);
 
-            UserResponse userResponse = new UserResponse(
+            UserResponseDTO userResponse = new UserResponseDTO(
                     savedUser.getId(),
                     savedUser.getUsername(),
                     savedUser.getEmail()
             );
 
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new AuthResponse(true, "Usuario registrado exitosamente", userResponse));
+                    .body(new AuthResponseDTO(true, "Usuario registrado exitosamente", userResponse));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new AuthResponse(false, "Error interno del servidor"));
+                    .body(new AuthResponseDTO(false, "Error interno del servidor"));
         }
     }
 
-    public ResponseEntity<AuthResponse> logout(String token) {
+    public ResponseEntity<AuthResponseDTO> logout(String token) {
         // Implementar más tarde
-        return ResponseEntity.ok(new AuthResponse(true, "Logout pendiente de implementar"));
+        return ResponseEntity.ok(new AuthResponseDTO(true, "Logout pendiente de implementar"));
     }
 }
