@@ -5,7 +5,6 @@ import com.metrica.marzo25.geofilm.dto.request.RegisterRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.AuthResponseDTO;
 import com.metrica.marzo25.geofilm.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
