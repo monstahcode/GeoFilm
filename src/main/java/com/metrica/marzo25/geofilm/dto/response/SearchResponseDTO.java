@@ -24,7 +24,7 @@ public class SearchResponseDTO {
     }
 
     public boolean isSuccess() {
-    	return false;
+    	return success;
     }
 
     public String getErrorMessage() {
@@ -33,10 +33,6 @@ public class SearchResponseDTO {
     
     public void setErrorMessage(String errorMessage) {
         this.message = errorMessage;
-    }
-    
-    public boolean getSuccess() {
-        return success;
     }
     
     public void setSuccess(boolean success) {
