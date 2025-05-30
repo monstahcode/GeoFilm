@@ -14,7 +14,7 @@ import com.metrica.marzo25.geofilm.service.LocationService;
 
 @RestController
 @RequestMapping("/api/v1/location")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LocationController {
 
 	private final LocationService service;
