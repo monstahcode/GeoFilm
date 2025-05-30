@@ -4,6 +4,7 @@ import com.metrica.marzo25.geofilm.dto.request.SearchRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
 import com.metrica.marzo25.geofilm.service.SearchService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +18,8 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-    @PostMapping("/movies")
-    public SearchResponseDTO searchMedia(@RequestBody SearchRequestDTO request) {
+    @PostMapping("/media")
+    public ResponseEntity<SearchResponseDTO> searchMedia(@RequestBody SearchRequestDTO request) {
         return searchService.searchMedia(request);
     }
 }
