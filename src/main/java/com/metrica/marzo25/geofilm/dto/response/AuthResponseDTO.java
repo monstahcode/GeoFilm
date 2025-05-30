@@ -1,19 +1,19 @@
 package com.metrica.marzo25.geofilm.dto.response;
 
-public class AuthResponse {
+public class AuthResponseDTO {
 
     private boolean success;
     private String message;
-    private UserResponse user;
+    private UserResponseDTO user;
 
-    public AuthResponse() {}
+    public AuthResponseDTO() {}
 
-    public AuthResponse(boolean success, String message) {
+    public AuthResponseDTO(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public AuthResponse(boolean success, String message, UserResponse user) {
+    public AuthResponseDTO(boolean success, String message, UserResponseDTO user) {
         this.success = success;
         this.message = message;
         this.user = user;
@@ -35,11 +35,11 @@ public class AuthResponse {
         this.message = message;
     }
 
-    public UserResponse getUser() {
+    public UserResponseDTO getUser() {
         return user;
     }
 
-    public void setUser(UserResponse user) {
+    public void setUser(UserResponseDTO user) {
         this.user = user;
     }
 }

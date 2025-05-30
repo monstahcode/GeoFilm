@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class RegisterRequest {
+public class RegisterRequestDTO {
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
@@ -19,9 +19,9 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    public RegisterRequest() {}
+    public RegisterRequestDTO() {}
 
-    public RegisterRequest(String username, String email, String password) {
+    public RegisterRequestDTO(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

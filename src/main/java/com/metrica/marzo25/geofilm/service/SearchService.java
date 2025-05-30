@@ -2,8 +2,8 @@ package com.metrica.marzo25.geofilm.service;
 
 import org.springframework.stereotype.Service;
 
-import com.metrica.marzo25.geofilm.dto.request.SearchRequest;
-import com.metrica.marzo25.geofilm.dto.response.SearchResponse;
+import com.metrica.marzo25.geofilm.dto.request.SearchRequestDTO;
+import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
 
 @Service
 public class SearchService {
@@ -16,7 +16,7 @@ public class SearchService {
         return "Resultados de búsqueda para actores: " + query;
     }
 
-	public SearchResponse searchMovies(SearchRequest request) {
+	public SearchResponseDTO searchMovies(SearchRequestDTO request) {
 		return null;
 	}
 }
