@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 public class Searcher {
 	private static final String OMDB_APIKEY = "2ab9ecab";
 	
-	// https://www.omdbapi.com/?s=harry+potter&apikey=2ab9ecab&page=4
 	private static final String SEARCH_FORMAT = "https://www.omdbapi.com/?s=%s&apikey=%s";
+	private static final String IDSEARCH_FORMAT = "http://www.omdbapi.com/?i=%s&apikey=%s";
 	
-	public static List<Media> searchMediaWithName(String name) throws IOException {
+	public static List<Media> searchMediaByName(String name) throws IOException {
 		List<Media> result = new ArrayList<>();
 		
 		name = name.replace("\\s+", "+");
@@ -79,6 +79,40 @@ public class Searcher {
         }
         
         return result;
+	}
+	
+	public static Media searchMediaById(String id) throws IOException {
+	    URL url = new URL(String.format(IDSEARCH_FORMAT, id, OMDB_APIKEY));
+	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();    
+	    
+	    connection.setRequestMethod("GET");
+	    connection.setRequestProperty("Accept", "application/json");
+	    
+	    StringBuilder content = new StringBuilder();
+	    BufferedReader bR = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    String line = "";
+	    
+	    while ((line = bR.readLine()) != null)
+	        content.append(line);
+	    
+	    bR.close();
+	    
+	    JSONObject json = new JSONObject(content.toString());
+	   
+	    if (json.has("Response") && json.getString("Response").equals("True")) {
+	        Media m = new Media(
+	            json.getString("imdbID"),
+	            json.getString("Title"),
+	            json.getString("Poster")
+	        );
+	        
+	        m.setPlot(json.getString("Plot"));
+	        m.setStarcast(json.getString("Actors").split(", "));
+	        
+	        return m;
+	    }
+	    
+	    return null;
 	}
 	
 }
