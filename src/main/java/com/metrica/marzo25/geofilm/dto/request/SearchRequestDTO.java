@@ -1,16 +1,16 @@
 package com.metrica.marzo25.geofilm.dto.request;
 
 public class SearchRequestDTO {
-    private String mediaName;
+    private String searchData;
 
     public SearchRequestDTO() {
     }
 
-    public SearchRequestDTO(String mediaName) {
-        this.mediaName = mediaName;
+    public SearchRequestDTO(String searchData) {
+        this.searchData = searchData;
     }
 
-    public String getMediaName() {
-        return mediaName;
+    public String getSeachData() {
+        return searchData;
     }
 }

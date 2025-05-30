@@ -42,7 +42,7 @@ public class AuthService {
                         foundUser.getUsername(),
                         foundUser.getEmail()
                 );
-                return ResponseEntity.ok(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new AuthResponseDTO(false, "Contraseña incorrecta"));
@@ -91,7 +91,7 @@ public class AuthService {
     }
 
     public ResponseEntity<AuthResponseDTO> logout(String token) {
-        // Implementar más tarde
+        // Implementar más tarde. Igual lo tiene que hacer el front?
         return ResponseEntity.ok(new AuthResponseDTO(true, "Logout pendiente de implementar"));
     }
 }
