@@ -28,9 +28,9 @@ public class SearchService {
     public ResponseEntity<SearchResponseDTO> searchMedia(SearchRequestDTO request) {
         try {
         	String name = request.getSeachData();
-            if (name == null || name.isBlank())
+            /*if (name == null || name.isBlank())
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
-
+*/
             List<Media> result = new ArrayList<>();
 
             name = name.replace("\\s+", "+"); // probably useless
