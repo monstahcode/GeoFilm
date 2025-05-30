@@ -44,12 +44,12 @@ public class Media {
 		return this.posterURL;
 	}
 	
-	public String getPlot() {
-		return this.plot;
-	}
-	
 	public void setPlot(String plot) {
 		this.plot = plot;
+	}
+	
+	public void setStarcast(String[] starCast) {
+		this.starCast = starCast;
 	}
 	
 	class Scrapper {
@@ -82,50 +82,8 @@ public class Media {
 			if(!result.isEmpty()) result.remove(result.size()-1);
 			return result.toArray(new MediaLocation[0]);
 		}
-
-		public String getPlot() throws IOException {
-			if(Media.this.plot == null)
-				Media.this.plot = fetchPlot();
-			
-			return new String(Media.this.plot);
-		}
-		
-		private String fetchPlot() throws IOException {
-			Document doc = Jsoup.connect(String.format(IMDB_MAIN_FORMAT, Media.this.id)).get();
-			
-			Element plotSpan = doc.selectFirst("span[data-testid^=plot]");
-            if(plotSpan != null)
-                return plotSpan.text();
-			return "N/A";
-		}
-		
-		public String[] getStarCast() throws IOException {
-			if(Media.this.starCast == null)
-				Media.this.starCast = fetchStarCast();
-			
-			String[] copy = new String[Media.this.starCast.length];
-			System.arraycopy(Media.this.locations, 0, copy, 0, Media.this.starCast.length);
-			return copy;
-		}
-		
-		private String[] fetchStarCast() throws IOException {
-	        Document doc = Jsoup.connect(String.format(IMDB_LOC_FORMAT, Media.this.id)).get();
-	        
-	        Element starsSection = doc.selectFirst("[data-testid=title-pc-principal-credit] ul");
-
-	        List<String> stars = new ArrayList<>();
-	        if (starsSection != null) {
-	            Elements starLinks = starsSection.select("a.ipc-metadata-list-item__list-content-item");
-	            for (int i = 0; i < Math.min(3, starLinks.size()); i++) {
-	                stars.add(starLinks.get(i).text());
-	            }
-	        }
-	        
-	        return stars.toArray(new String[0]);
-		}
 	}
 	
-	public record Location(String original, String fictional) {}
 	
 	@Override
 	public String toString() {
