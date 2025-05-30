@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.metrica.marzo25.geofilm.controller.AuthController;
+import com.metrica.marzo25.geofilm.controller.LocationController;
+import com.metrica.marzo25.geofilm.controller.UserController;
 import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
-import com.metrica.marzo25.geofilm.repository.LocationRepository;
-import com.metrica.marzo25.geofilm.repository.UserRepository;
-import com.metrica.marzo25.geofilm.service.AuthService;
-import com.metrica.marzo25.geofilm.service.UserService;
 
 import jakarta.transaction.Transactional;
 
@@ -27,16 +26,14 @@ import jakarta.transaction.Transactional;
 class GeofilmApplicationTests {
 
 	@Autowired
-	UserService userService;
+	AuthController authController;	
 	@Autowired
-	AuthService authService;
+	UserController userController;
+	@Autowired
+	LocationController locationController;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	@Autowired
-	LocationRepository locationRepository;
-	@Autowired
-	UserRepository userRepository;
-	
+		
 	@Test
 	@Transactional
 	void obtenerBaseDatos() {
@@ -46,7 +43,7 @@ class GeofilmApplicationTests {
 	    location1.setFictionalAddress("pepeito grillo");
 	    location1.setLatitude(40.4168);
 	    location1.setLongitude(-3.7038);
-	    Location savedLocation1 = locationRepository.save(location1);
+	    Location savedLocation1 = locationController.saveLocation(location1);
 	    
 	    Location location2 = new Location();
 	    location2.setName("Barcelona");
@@ -54,16 +51,16 @@ class GeofilmApplicationTests {
 	    location2.setFictionalAddress("mala droga");
 	    location2.setLatitude(41.3851);
 	    location2.setLongitude(2.1734);
-	    Location savedLocation2 = locationRepository.save(location2);
+	    Location savedLocation2 = locationController.saveLocation(location2);
 	    
 	    User user = new User();
 	    user.setUsername("Juan");
 	    user.setEmail("yahooo@yahoo.com");
 	    user.setPassword(passwordEncoder.encode("123456789"));user.addFavoriteLocation(savedLocation1);
 	    user.addFavoriteLocation(savedLocation2);
-	    User savedUser = userRepository.save(user);
+	    User savedUser = userController.saveUser(user);
 	    assertNotNull(savedUser.getId());
-	    User result = userRepository.findById(savedUser.getId()).orElse(new User());
+	    User result = userController.getById(savedUser.getId()).orElse(new User());
 	    assertNotNull(result);
 	    assertEquals("Juan", result.getUsername());
 	    assertEquals("yahooo@yahoo.com", result.getEmail());
@@ -93,17 +90,20 @@ class GeofilmApplicationTests {
 	    location2.setFictionalAddress("mala droga");
 	    location2.setLatitude(41.38);
 	    location2.setLongitude(2.17);
-	    Location savedLocation1 = locationRepository.save(location1);
-	    Location savedLocation2 = locationRepository.save(location2);
+	    Location savedLocation1 = locationController.saveLocation(location1);
+	    Location savedLocation2 = locationController.saveLocation(location2);
 	    
 	    User user = new User("Juan", "yahooo@yahoo.com", passwordEncoder.encode("123456789"));
 	    user.addFavoriteLocation(savedLocation1);
 	    user.addFavoriteLocation(savedLocation2);
-	    User savedUser = userRepository.save(user);
-	    User userResult = userRepository.findById(savedUser.getId()).orElse(null);
+	    User savedUser = userController.saveUser(user);
+	    User userResult = userController.getById(savedUser.getId()).orElse(null);
+	    userResult.getFavoriteLocations().stream()
+	    .map(location -> location.getName())
+	    .forEach(System.out::println);
 	    assertNotNull(userResult);
 	    assertEquals(2, userResult.getFavoriteLocations().size());
-	    Location locationResult1 = locationRepository.findById(savedLocation1.getId()).orElse(null);
+	    Location locationResult1 = locationController.getById(savedLocation1.getId()).orElse(null);
 	    assertNotNull(locationResult1);
 	    assertEquals(1, locationResult1.getFavoriteByUsers().size());
 	}
@@ -117,7 +117,7 @@ class GeofilmApplicationTests {
 	    location1.setFictionalAddress("Madrid Fiction");
 	    location1.setLatitude(40.4168);
 	    location1.setLongitude(-3.7038);
-	    Location savedLocation1 = locationRepository.save(location1);
+	    Location savedLocation1 = locationController.saveLocation(location1);
 	    
 	    Location location2 = new Location();
 	    location2.setName("Barcelona");
@@ -125,7 +125,7 @@ class GeofilmApplicationTests {
 	    location2.setFictionalAddress("Barcelona Fiction");
 	    location2.setLatitude(41.3851);
 	    location2.setLongitude(2.1734);
-	    Location savedLocation2 = locationRepository.save(location2);
+	    Location savedLocation2 = locationController.saveLocation(location2);
 	    
 	    Location location3 = new Location();
 	    location3.setName("Valencia");
@@ -133,8 +133,8 @@ class GeofilmApplicationTests {
 	    location3.setFictionalAddress("Valencia Fiction");
 	    location3.setLatitude(39.4699);
 	    location3.setLongitude(-0.3763);
-	    Location savedLocation3 = locationRepository.save(location3);
-	    List<Location> allExceptFirst = locationRepository.findByIdNot(savedLocation1.getId());
+	    Location savedLocation3 = locationController.saveLocation(location3);
+	    List<Location> allExceptFirst = locationController.getAllWithoutThis(savedLocation1.getId());
 	    assertEquals(2, allExceptFirst.size());
 	    Set<Long> foundIds = allExceptFirst.stream()
 	            .map(Location::getId)

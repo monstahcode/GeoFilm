@@ -109,9 +109,6 @@ public class Location {
 
 	public void setFavoriteByUsers(Set<User> favoriteByUsers) {
 		this.favoriteByUsers = favoriteByUsers;
-	}
+	}	
 	
-    
-    
-    
 }
