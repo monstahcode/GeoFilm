@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.metrica.marzo25.geofilm.dto.request.SearchRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
 import com.metrica.marzo25.geofilm.extra.Media;
+import com.metrica.marzo25.geofilm.extra.MediaLocation;
 
 @Service
 public class SearchService {
@@ -91,6 +92,10 @@ public class SearchService {
 
                 media.setPlot(json.getString("Plot"));
                 media.setStarcast(json.getString("Actors").split(", "));
+                
+                for(MediaLocation mLoc : media.getScrapper().getLocations()) {
+                	mLoc.getCoordenates();
+                }
                 
                 return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(List.of(media)));
             } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SearchResponseDTO("Error al buscar la película con id " + id));
