@@ -21,7 +21,7 @@ public class SeleniumUtil {
 
         FirefoxOptions options = new FirefoxOptions();
         // >>> Reemplaza la linea de abajo por la ruta del .exe de tu firefox <<<
-        options.setBinary("C:\\Users\\Ivan Ruiz\\AppData\\Local\\Mozilla Firefox\\firefox.exe");
+        options.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
         options.addArguments("-headless");
 
         driver = new FirefoxDriver(options);
@@ -35,8 +35,7 @@ public class SeleniumUtil {
 	}
 	
 	public Document getExpandedLocationDocument(String id) throws IOException, InterruptedException {
-		String imdbId = "tt0903747";
-        String url = "https://www.imdb.com/title/" + imdbId + "/locations";
+        String url = "https://www.imdb.com/title/" + id + "/locations";
 
         driver.get(url);
         Thread.sleep(2000);
