@@ -28,9 +28,4 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         return authService.login(request);
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<AuthResponseDTO> logout(@RequestHeader("Authorization") String token) {
-        return authService.logout(token);
-    }
 }

@@ -87,9 +87,4 @@ public class AuthService {
                     .body(new AuthResponseDTO(false, "Error interno del servidor"));
         }
     }
-
-    public ResponseEntity<AuthResponseDTO> logout(String token) {
-        // Implementar más tarde. Igual lo tiene que hacer el front?
-        return ResponseEntity.ok(new AuthResponseDTO(true, "Logout pendiente de implementar"));
-    }
 }
