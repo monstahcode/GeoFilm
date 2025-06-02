@@ -38,7 +38,6 @@ public class AuthService {
 
             if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
                 UserResponseDTO userResponse = new UserResponseDTO(
-                        foundUser.getId(),
                         foundUser.getUsername(),
                         foundUser.getEmail()
                 );
@@ -76,7 +75,6 @@ public class AuthService {
             User savedUser = userRepository.save(newUser);
 
             UserResponseDTO userResponse = new UserResponseDTO(
-                    savedUser.getId(),
                     savedUser.getUsername(),
                     savedUser.getEmail()
             );
