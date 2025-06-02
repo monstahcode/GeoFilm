@@ -33,8 +33,10 @@ public class SearchService {
 */
             List<Media> result = new ArrayList<>();
 
-            name = name.replace("\\s+", "+"); // probably useless
-
+            System.out.println("HEREEE");
+            name = name.replaceAll("\\s+", "+"); // probably useless
+            System.out.println("HEREEE with: " + name);
+            
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
             JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
 

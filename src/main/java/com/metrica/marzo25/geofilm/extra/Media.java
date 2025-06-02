@@ -9,6 +9,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Media {
 	private final String id;
 	private final String title;
@@ -25,6 +27,7 @@ public class Media {
 		this.posterURL = posterURL;
 	}
 	
+	@JsonIgnore
 	public Scrapper getScrapper() {
 		if(scrapperInstance == null)
 			scrapperInstance = new Scrapper();

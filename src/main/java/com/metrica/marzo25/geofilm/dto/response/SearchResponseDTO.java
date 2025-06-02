@@ -1,13 +1,12 @@
 package com.metrica.marzo25.geofilm.dto.response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.metrica.marzo25.geofilm.extra.Media;
 
 public class SearchResponseDTO {
 
-	private List<Media> mediaList;
+	private Media[] mediaList;
     private String message;
     private boolean success;
 
@@ -19,8 +18,8 @@ public class SearchResponseDTO {
     public SearchResponseDTO(List<Media> mediaList) {
         this.message = "Encontrados " + mediaList.size();
         this.success = true;
-        this.mediaList = new ArrayList<>();
-        mediaList.forEach(media -> this.mediaList.add(media));
+        this.mediaList = mediaList.stream()
+        		.toArray(Media[]::new);
     }
 
     public boolean isSuccess() {
@@ -39,4 +38,22 @@ public class SearchResponseDTO {
         this.success = success;
     }
 
+	public Media[] getMediaList() {
+		return mediaList;
+	}
+
+	public void setMediaList(Media[] mediaList) {
+		this.mediaList = mediaList;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+    
+    
 }
