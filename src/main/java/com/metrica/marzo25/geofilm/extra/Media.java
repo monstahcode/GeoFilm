@@ -55,7 +55,7 @@ public class Media {
 		this.starCast = starCast;
 	}
 	
-	class Scrapper {
+	public class Scrapper {
 		private static final String IMDB_MAIN_FORMAT = "https://www.imdb.com/es/title/%s";
 		private static final String IMDB_LOC_FORMAT = "https://www.imdb.com/es/title/%s/locations/";
 	
