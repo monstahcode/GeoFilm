@@ -28,14 +28,11 @@ public class SearchService {
     public ResponseEntity<SearchResponseDTO> searchMedia(SearchRequestDTO request) {
         try {
         	String name = request.getSeachData();
-            /*if (name == null || name.isBlank())
+            if (name == null || name.isBlank())
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
-*/
             List<Media> result = new ArrayList<>();
 
-            System.out.println("HEREEE");
             name = name.replaceAll("\\s+", "+"); // probably useless
-            System.out.println("HEREEE with: " + name);
             
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
             JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached

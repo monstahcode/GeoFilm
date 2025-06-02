@@ -17,12 +17,12 @@ import com.metrica.marzo25.geofilm.service.UserService;
 @RestController
 @RequestMapping("/api/v1/user")
 @CrossOrigin(origins = "*")
-public class UserController {
+public class ProfileController {
 	
 	private UserService service;
 
 	@Autowired
-	public UserController(UserService service) {
+	public ProfileController(UserService service) {
 		this.service = service;
 	}
 	
