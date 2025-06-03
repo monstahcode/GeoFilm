@@ -7,7 +7,6 @@ import com.metrica.marzo25.geofilm.dto.response.UserResponseDTO;
 
 import com.metrica.marzo25.geofilm.entity.User;
 
-import com.metrica.marzo25.geofilm.exception.AuthenticationException;
 import com.metrica.marzo25.geofilm.exception.InvalidCredentialsException;
 import com.metrica.marzo25.geofilm.exception.UserAlreadyExistsException;
 import com.metrica.marzo25.geofilm.exception.UserNotFoundException;
@@ -26,78 +25,59 @@ import java.util.Optional;
 @Transactional
 public class AuthService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+	private UserRepository userRepository;
+	private PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+	public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    public ResponseEntity<AuthResponseDTO> login(LoginRequestDTO request) {
-        try {
-            Optional<User> existing = userRepository.findByEmail(request.getEmail());
-            if (!existing.isPresent()) {
-                throw new UserNotFoundException("El email especificado no existe");
-            }
+	public ResponseEntity<AuthResponseDTO> login(LoginRequestDTO request) {
+		Optional<User> existing = userRepository.findByEmail(request.getEmail());
+		if (!existing.isPresent()) {
+			throw new UserNotFoundException("El email especificado no existe");
+		}
 
-            User foundUser = existing.get();
+		User foundUser = existing.get();
 
-            if (!passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
-                throw new InvalidCredentialsException("Contraseña incorrecta");
-            }
+		if (!passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
+			throw new InvalidCredentialsException("Contraseña incorrecta");
+		}
 
-            UserResponseDTO userResponse = new UserResponseDTO(
-                    foundUser.getUsername(),
-                    foundUser.getEmail()
-            );
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
+		UserResponseDTO userResponse = new UserResponseDTO(
+				foundUser.getUsername(),
+				foundUser.getEmail()
+				);
+		return ResponseEntity.status(HttpStatus.ACCEPTED)
+				.body(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
+	}
 
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new AuthResponseDTO(false, e.getMessage()));
-        } catch (InvalidCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new AuthResponseDTO(false, e.getMessage()));
-        } catch (Exception e) {
-            throw new AuthenticationException("Error durante el proceso de autenticación", e);
-        }
-    }
+	public ResponseEntity<AuthResponseDTO> register(RegisterRequestDTO request) {
+		Optional<User> existing = userRepository.findByUsername(request.getUsername());
+		if (existing.isPresent()) {
+			throw new UserAlreadyExistsException("El nombre de usuario ya existe");
+		}
 
-    public ResponseEntity<AuthResponseDTO> register(RegisterRequestDTO request) {
-        try {
-            Optional<User> existing = userRepository.findByUsername(request.getUsername());
-            if (existing.isPresent()) {
-                throw new UserAlreadyExistsException("El nombre de usuario ya existe");
-            }
+		existing = userRepository.findByEmail(request.getEmail());
+		if (existing.isPresent()) {
+			throw new UserAlreadyExistsException("El email ya está registrado");
+		}
 
-            existing = userRepository.findByEmail(request.getEmail());
-            if (existing.isPresent()) {
-                throw new UserAlreadyExistsException("El email ya está registrado");
-            }
+		User newUser = new User(
+				request.getUsername(),
+				request.getEmail(),
+				passwordEncoder.encode(request.getPassword())
+				);
 
-            User newUser = new User(
-                    request.getUsername(),
-                    request.getEmail(),
-                    passwordEncoder.encode(request.getPassword())
-            );
+		User savedUser = userRepository.save(newUser);
 
-            User savedUser = userRepository.save(newUser);
+		UserResponseDTO userResponse = new UserResponseDTO(
+				savedUser.getUsername(),
+				savedUser.getEmail()
+				);
 
-            UserResponseDTO userResponse = new UserResponseDTO(
-                    savedUser.getUsername(),
-                    savedUser.getEmail()
-            );
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new AuthResponseDTO(true, "Usuario registrado exitosamente", userResponse));
-
-        } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new AuthResponseDTO(false, e.getMessage()));
-        } catch (Exception e) {
-            throw new AuthenticationException("Error durante el proceso de registro", e);
-        }
-    }
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new AuthResponseDTO(true, "Usuario registrado exitosamente", userResponse));
+	}
 }

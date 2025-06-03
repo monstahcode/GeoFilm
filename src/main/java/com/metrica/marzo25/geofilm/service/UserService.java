@@ -21,14 +21,10 @@ public class UserService {
     }
 
     public Optional<User> getByEmail(String email) {
-        try {
-            if (email == null || email.isBlank()) {
-                throw new IllegalArgumentException("El email no puede estar vacío");
-            }
-            return repository.findByEmail(email);
-        } catch (Exception e) {
-            throw new UserServiceException("Error al buscar usuario por email: " + email, e);
-        }
+    	if (email == null || email.isBlank()) {
+    		throw new IllegalArgumentException("El email no puede estar vacío");
+    	}
+    	return repository.findByEmail(email);
     }
     
     public User getByEmailOrThrow(String email) {
@@ -37,41 +33,29 @@ public class UserService {
     }
     
     public User saveUser(User user) {
-        try {
-            if (user == null) {
-                throw new IllegalArgumentException("El usuario no puede ser nulo");
-            }
-            return repository.save(user);
-        } catch (Exception e) {
-            throw new UserServiceException("Error al guardar el usuario", e);
-        }
+    	if (user == null) {
+    		throw new IllegalArgumentException("El usuario no puede ser nulo");
+    	}
+    	return repository.save(user);
     }
     
     public User saveUserLocation(User user, Location location) {
-        try {
-            if (user == null) {
-                throw new IllegalArgumentException("El usuario no puede ser nulo");
-            }
-            if (location == null) {
-                throw new IllegalArgumentException("La ubicación no puede ser nula");
-            }
-            
-            user.addFavoriteLocation(location);
-            return repository.save(user);
-        } catch (Exception e) {
-            throw new UserServiceException("Error al guardar la ubicación favorita del usuario", e);
-        }
+    	if (user == null) {
+    		throw new IllegalArgumentException("El usuario no puede ser nulo");
+    	}
+    	if (location == null) {
+    		throw new IllegalArgumentException("La ubicación no puede ser nula");
+    	}
+
+    	user.addFavoriteLocation(location);
+    	return repository.save(user);
     }
     
     public Optional<User> getById(Long id) {
-        try {
-            if (id == null) {
-                throw new IllegalArgumentException("El ID no puede ser nulo");
-            }
-            return repository.findById(id);
-        } catch (Exception e) {
-            throw new UserServiceException("Error al buscar usuario por ID: " + id, e);
-        }
+    	if (id == null) {
+    		throw new IllegalArgumentException("El ID no puede ser nulo");
+    	}
+    	return repository.findById(id);
     }
     
     public User getByIdOrThrow(Long id) {

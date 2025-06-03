@@ -8,6 +8,7 @@ public class SearchResponseDTO {
 
 	private Media[] mediaList;
     private String message;
+    private Integer found;
     private boolean success;
 
     public SearchResponseDTO(String message) {
@@ -16,7 +17,8 @@ public class SearchResponseDTO {
     }
     
     public SearchResponseDTO(List<Media> mediaList) {
-        this.message = "Encontrados " + mediaList.size();
+    	this.message = "Encontrado";
+    	this.found = mediaList.size();
         this.success = true;
         this.mediaList = mediaList.stream()
         		.toArray(Media[]::new);
@@ -24,14 +26,6 @@ public class SearchResponseDTO {
 
     public boolean isSuccess() {
     	return success;
-    }
-
-    public String getErrorMessage() {
-        return message;
-    }
-    
-    public void setErrorMessage(String errorMessage) {
-        this.message = errorMessage;
     }
     
     public void setSuccess(boolean success) {
@@ -53,7 +47,12 @@ public class SearchResponseDTO {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-    
-    
+	
+	public Integer getFound() {
+		return found;
+	}
+	
+	public void setFound(Integer found) {
+		this.found = found;
+	}
 }
