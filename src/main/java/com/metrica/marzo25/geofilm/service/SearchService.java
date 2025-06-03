@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.metrica.marzo25.geofilm.dto.request.SearchRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
+import com.metrica.marzo25.geofilm.exception.ExternalApiException;
+import com.metrica.marzo25.geofilm.exception.InvalidSearchDataException;
+import com.metrica.marzo25.geofilm.exception.MediaSearchException;
 import com.metrica.marzo25.geofilm.extra.Media;
 import com.metrica.marzo25.geofilm.extra.MediaLocation;
 
@@ -29,105 +31,161 @@ public class SearchService {
 
     public ResponseEntity<SearchResponseDTO> searchMedia(SearchRequestDTO request) {
         try {
-        	String name = request.getSeachData();
-            if (name == null || name.isBlank())
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
-            List<Media> result = new ArrayList<>();
+            String name = request.getSeachData();
+            validateSearchData(name);
             
-            name = name.replaceAll("\\s+", "+"); // probably useless
+            List<Media> result = new ArrayList<>();
+            name = name.replaceAll("\\s+", "+");
             
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
-            if(json.has("Search")) {
-            	JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
+            
+            if (!json.has("Search")) {
+                throw new MediaSearchException("No se encontraron resultados para: " + request.getSeachData());
+            }
+            
+            JSONArray searchResults = json.getJSONArray("Search");
 
-                for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
-                    JSONObject found = searchResults.getJSONObject(i);
-                    result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
-                }
-                
-                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
-            } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("No se encontraron resultados para la película: " + name));
-        } catch (Exception e) { 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
+            for (int i = 0; i < searchResults.length(); i++) {
+                JSONObject found = searchResults.getJSONObject(i);
+                result.add(new Media(
+                    found.getString("imdbID"), 
+                    found.getString("Title"), 
+                    found.getString("Poster")
+                ));
+            }
+            
+            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(result));
+            
+        } catch (InvalidSearchDataException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (MediaSearchException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (ExternalApiException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (Exception e) {
+            throw new MediaSearchException("Error inesperado al buscar la película", e);
         }
     }
     
     public ResponseEntity<SearchResponseDTO> predictedSearchMedia(SearchRequestDTO request) {
         try {
-        	String name = request.getSeachData();
-            if (name == null || name.isBlank())
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
+            String name = request.getSeachData();
+            validateSearchData(name);
 
             List<Media> result = new ArrayList<>();
-
-            name = name.replace("\\s+", "+"); // probably useless
+            name = name.replace("\\s+", "+");
 
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
             
-            if(json.has("Search")) {
-            	JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
-
-                for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
-                    JSONObject found = searchResults.getJSONObject(i);
-                    result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
-                }
-                
-                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
-            } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("No se encontraron resultados para la película: " + name));
+            if (!json.has("Search")) {
+                throw new MediaSearchException("No se encontraron resultados para: " + request.getSeachData());
+            }
             
-        } catch (Exception e) { 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
+            JSONArray searchResults = json.getJSONArray("Search");
+
+            for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
+                JSONObject found = searchResults.getJSONObject(i);
+                result.add(new Media(
+                    found.getString("imdbID"), 
+                    found.getString("Title"), 
+                    found.getString("Poster")
+                ));
+            }
+            
+            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(result));
+            
+        } catch (InvalidSearchDataException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (MediaSearchException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (ExternalApiException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (Exception e) {
+            throw new MediaSearchException("Error inesperado al buscar la película", e);
         }
     }
     
     public ResponseEntity<SearchResponseDTO> idSearchMedia(SearchRequestDTO request) {
         try {
             String id = request.getSeachData();
-            if (id == null || id.isBlank()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
-            }
+            validateSearchData(id);
 
             JSONObject json = getJSONMedia(String.format(IDSEARCH_FORMAT, id, OMDB_APIKEY));
 
-            if (json.has("Response") && json.getString("Response").equals("True")) {
-                Media media = new Media(
-                    json.getString("imdbID"),
-                    json.getString("Title"),
-                    json.getString("Poster")
-                );
-
-                media.setPlot(json.getString("Plot"));
-                media.setStarcast(json.getString("Actors").split(", "));
-
-                // Explicitly fetch and set locations
-                MediaLocation[] locations = media.getScrapper().getLocations();
-                media.locations = locations; // Ensure the locations field is set
-
-                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SearchResponseDTO("Error al buscar la película con id " + id));
+            if (!json.has("Response") || !json.getString("Response").equals("True")) {
+                throw new MediaSearchException("No se encontró la película con ID: " + id);
             }
+
+            Media media = new Media(
+                json.getString("imdbID"),
+                json.getString("Title"),
+                json.getString("Poster")
+            );
+
+            media.setPlot(json.getString("Plot"));
+            media.setStarcast(json.getString("Actors").split(", "));
+            
+            // Obtener coordenadas de las ubicaciones
+            try {
+                for (MediaLocation mLoc : media.getScrapper().getLocations()) {
+                    mLoc.getCoordenates();
+                }
+            } catch (Exception e) {
+                // Log warning pero no fallar completamente
+                System.err.println("Warning: Error al obtener coordenadas: " + e.getMessage());
+            }
+            
+            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(List.of(media)));
+            
+        } catch (InvalidSearchDataException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (MediaSearchException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new SearchResponseDTO(e.getMessage()));
+        } catch (ExternalApiException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(new SearchResponseDTO(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
+            throw new MediaSearchException("Error inesperado al buscar la película por ID", e);
         }
     }
     
-    private static JSONObject getJSONMedia(String urlDomain) throws IOException {
-    	URL url = new URL(urlDomain);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    private void validateSearchData(String searchData) {
+        if (searchData == null || searchData.isBlank()) {
+            throw new InvalidSearchDataException("El dato de búsqueda no puede estar vacío");
+        }
+    }
+    
+    private static JSONObject getJSONMedia(String urlDomain) throws ExternalApiException {
+        try {
+            URL url = new URL(urlDomain);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
 
-        StringBuilder content = new StringBuilder();
-        BufferedReader bR = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String line = "";
+            StringBuilder content = new StringBuilder();
+            BufferedReader bR = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
 
-        while ((line = bR.readLine()) != null)
-            content.append(line);
+            while ((line = bR.readLine()) != null) {
+                content.append(line);
+            }
 
-        bR.close();
-
-        return new JSONObject(content.toString());
+            bR.close();
+            return new JSONObject(content.toString());
+            
+        } catch (IOException e) {
+            throw new ExternalApiException("Error al conectar con la API externa de OMDB", e);
+        } catch (Exception e) {
+            throw new ExternalApiException("Error al procesar la respuesta de la API externa", e);
+        }
     }
 }

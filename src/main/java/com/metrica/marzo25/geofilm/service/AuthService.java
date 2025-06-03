@@ -4,8 +4,16 @@ import com.metrica.marzo25.geofilm.dto.request.LoginRequestDTO;
 import com.metrica.marzo25.geofilm.dto.request.RegisterRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.AuthResponseDTO;
 import com.metrica.marzo25.geofilm.dto.response.UserResponseDTO;
+
 import com.metrica.marzo25.geofilm.entity.User;
+
+import com.metrica.marzo25.geofilm.exception.AuthenticationException;
+import com.metrica.marzo25.geofilm.exception.InvalidCredentialsException;
+import com.metrica.marzo25.geofilm.exception.UserAlreadyExistsException;
+import com.metrica.marzo25.geofilm.exception.UserNotFoundException;
+
 import com.metrica.marzo25.geofilm.repository.UserRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,25 +38,30 @@ public class AuthService {
         try {
             Optional<User> existing = userRepository.findByEmail(request.getEmail());
             if (!existing.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponseDTO(false, "El email especificado no existe"));
+                throw new UserNotFoundException("El email especificado no existe");
             }
 
             User foundUser = existing.get();
 
-            if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
-                UserResponseDTO userResponse = new UserResponseDTO(
-                        foundUser.getUsername(),
-                        foundUser.getEmail()
-                );
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponseDTO(false, "Contraseña incorrecta"));
+            if (!passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
+                throw new InvalidCredentialsException("Contraseña incorrecta");
             }
+
+            UserResponseDTO userResponse = new UserResponseDTO(
+                    foundUser.getUsername(),
+                    foundUser.getEmail()
+            );
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new AuthResponseDTO(true, "Usuario logeado exitosamente", userResponse));
+
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new AuthResponseDTO(false, e.getMessage()));
+        } catch (InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new AuthResponseDTO(false, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new AuthResponseDTO(false, "Error interno del servidor"));
+            throw new AuthenticationException("Error durante el proceso de autenticación", e);
         }
     }
 
@@ -56,14 +69,12 @@ public class AuthService {
         try {
             Optional<User> existing = userRepository.findByUsername(request.getUsername());
             if (existing.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponseDTO(false, "El nombre de usuario ya existe"));
+                throw new UserAlreadyExistsException("El nombre de usuario ya existe");
             }
 
             existing = userRepository.findByEmail(request.getEmail());
             if (existing.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new AuthResponseDTO(false, "El email ya está registrado"));
+                throw new UserAlreadyExistsException("El email ya está registrado");
             }
 
             User newUser = new User(
@@ -82,9 +93,11 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new AuthResponseDTO(true, "Usuario registrado exitosamente", userResponse));
 
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new AuthResponseDTO(false, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new AuthResponseDTO(false, "Error interno del servidor"));
+            throw new AuthenticationException("Error durante el proceso de registro", e);
         }
     }
 }
