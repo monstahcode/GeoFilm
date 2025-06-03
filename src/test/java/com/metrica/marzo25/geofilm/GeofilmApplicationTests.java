@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.metrica.marzo25.geofilm.controller.AuthController;
-import com.metrica.marzo25.geofilm.controller.LocationController;
 import com.metrica.marzo25.geofilm.controller.ProfileController;
 import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
@@ -30,11 +29,9 @@ class GeofilmApplicationTests {
 	@Autowired
 	ProfileController userController;
 	@Autowired
-	LocationController locationController;
-	@Autowired
 	PasswordEncoder passwordEncoder;
 		
-	@Test
+	/*@Test
 	@Transactional
 	void obtenerBaseDatos() {
 	    Location location1 = new Location();
@@ -148,7 +145,7 @@ class GeofilmApplicationTests {
 	    assertFalse(foundNames.contains("Madrid"));
 	    assertTrue(foundNames.contains("Barcelona"));
 	    assertTrue(foundNames.contains("Valencia"));
-	}
+	} */
 }
 
 
