@@ -28,9 +28,8 @@ public class SearchController {
     	return searchService.predictedSearchMedia(request);
     }
     
-    // Maybe delegar a otro controllador idk.
-    @PostMapping("/locations")
-    public ResponseEntity<SearchResponseDTO> searchLocations(@RequestBody SearchRequestDTO request){
+    @PostMapping("/id")
+    public ResponseEntity<SearchResponseDTO> searchById(@RequestBody SearchRequestDTO request) {
     	return searchService.idSearchMedia(request);
     }
 }
