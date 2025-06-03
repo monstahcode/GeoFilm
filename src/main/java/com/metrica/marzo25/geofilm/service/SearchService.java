@@ -60,7 +60,7 @@ public class SearchService {
 
             List<Media> result = new ArrayList<>();
 
-            name = name.replace("\\s+", "+"); // probably useless
+            name = name.replaceAll("\\s+", "+"); // probably useless
 
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
             
