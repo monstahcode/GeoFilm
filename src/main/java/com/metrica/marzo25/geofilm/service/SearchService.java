@@ -33,19 +33,21 @@ public class SearchService {
             if (name == null || name.isBlank())
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
             List<Media> result = new ArrayList<>();
-          
+            
             name = name.replaceAll("\\s+", "+"); // probably useless
             
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
-            JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
+            if(json.has("Search")) {
+            	JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
 
-            for (int i = 0; i < searchResults.length(); i++) {
-                JSONObject found = searchResults.getJSONObject(i);
-                result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
-            }
-            
-            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(result));
-        } catch (Exception e) {
+                for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
+                    JSONObject found = searchResults.getJSONObject(i);
+                    result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
+                }
+                
+                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
+            } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("No se encontraron resultados para la película: " + name));
+        } catch (Exception e) { 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
         }
     }
