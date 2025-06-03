@@ -44,7 +44,7 @@ public class User {
 
     // Constructores
     public User() {
-    	this.favoriteLocations = new HashSet<Location>();
+    	this.favoriteLocations = new HashSet<>();
     }
 
     public User(String username, String email, String password) {

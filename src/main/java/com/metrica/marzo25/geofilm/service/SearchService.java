@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,14 +61,18 @@ public class SearchService {
             name = name.replace("\\s+", "+"); // probably useless
 
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
-            JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
-
-            for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
-                JSONObject found = searchResults.getJSONObject(i);
-                result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
-            }
             
-            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(result));
+            if(json.has("Search")) {
+            	JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
+
+                for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
+                    JSONObject found = searchResults.getJSONObject(i);
+                    result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
+                }
+                
+                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
+            } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("No se encontraron resultados para la película: " + name));
+            
         } catch (Exception e) { 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
         }
@@ -96,7 +101,7 @@ public class SearchService {
                 	mLoc.getCoordenates();
                 }
                 
-                return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(List.of(media)));
+                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
             } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SearchResponseDTO("Error al buscar la película con id " + id));
 
             
