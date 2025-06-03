@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.metrica.marzo25.geofilm.controller.AuthController;
 import com.metrica.marzo25.geofilm.controller.LocationController;
-import com.metrica.marzo25.geofilm.controller.UserController;
+import com.metrica.marzo25.geofilm.controller.ProfileController;
 import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
 
@@ -28,7 +28,7 @@ class GeofilmApplicationTests {
 	@Autowired
 	AuthController authController;	
 	@Autowired
-	UserController userController;
+	ProfileController userController;
 	@Autowired
 	LocationController locationController;
 	@Autowired
