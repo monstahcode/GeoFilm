@@ -82,32 +82,32 @@ public class SearchService {
     
     public ResponseEntity<SearchResponseDTO> idSearchMedia(SearchRequestDTO request) {
         try {
-        	String id = request.getSeachData();
-            if (id == null || id.isBlank())
+            String id = request.getSeachData();
+            if (id == null || id.isBlank()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new SearchResponseDTO("El nombre de la película no puede estar vacío"));
+            }
 
             JSONObject json = getJSONMedia(String.format(IDSEARCH_FORMAT, id, OMDB_APIKEY));
 
-             
             if (json.has("Response") && json.getString("Response").equals("True")) {
-            	Media media = new Media(
-                        json.getString("imdbID"),
-                        json.getString("Title"),
-                        json.getString("Poster")
+                Media media = new Media(
+                    json.getString("imdbID"),
+                    json.getString("Title"),
+                    json.getString("Poster")
                 );
 
                 media.setPlot(json.getString("Plot"));
                 media.setStarcast(json.getString("Actors").split(", "));
-                
-                for(MediaLocation mLoc : media.getScrapper().getLocations()) {
-                	mLoc.getCoordenates();
-                }
-                
-                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
-            } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SearchResponseDTO("Error al buscar la película con id " + id));
 
-            
-        } catch (Exception e) { 
+                // Explicitly fetch and set locations
+                MediaLocation[] locations = media.getScrapper().getLocations();
+                media.locations = locations; // Ensure the locations field is set
+
+                return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SearchResponseDTO("Error al buscar la película con id " + id));
+            }
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SearchResponseDTO("Error al buscar la película: " + e.getMessage()));
         }
     }
