@@ -95,7 +95,7 @@ public class SearchService {
                 ));
             }
             
-            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(result));
+            return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
             
         } catch (InvalidSearchDataException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -141,7 +141,7 @@ public class SearchService {
                 System.err.println("Warning: Error al obtener coordenadas: " + e.getMessage());
             }
             
-            return ResponseEntity.status(HttpStatus.FOUND).body(new SearchResponseDTO(List.of(media)));
+            return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
             
         } catch (InvalidSearchDataException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
