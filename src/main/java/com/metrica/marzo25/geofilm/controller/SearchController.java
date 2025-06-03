@@ -22,4 +22,15 @@ public class SearchController {
     public ResponseEntity<SearchResponseDTO> searchMedia(@RequestBody SearchRequestDTO request) {
         return searchService.searchMedia(request);
     }
+    
+    @PostMapping("/preview")
+    public ResponseEntity<SearchResponseDTO> searchPreview(@RequestBody SearchRequestDTO request) {
+    	return searchService.predictedSearchMedia(request);
+    }
+    
+    // Maybe delegar a otro controllador idk.
+    @PostMapping("/locations")
+    public ResponseEntity<SearchResponseDTO> searchLocations(@RequestBody SearchRequestDTO request){
+    	return searchService.idSearchMedia(request);
+    }
 }

@@ -38,7 +38,6 @@ public class AuthService {
 
             if (passwordEncoder.matches(request.getPassword(), foundUser.getPassword())) {
                 UserResponseDTO userResponse = new UserResponseDTO(
-                        foundUser.getId(),
                         foundUser.getUsername(),
                         foundUser.getEmail()
                 );
@@ -76,7 +75,6 @@ public class AuthService {
             User savedUser = userRepository.save(newUser);
 
             UserResponseDTO userResponse = new UserResponseDTO(
-                    savedUser.getId(),
                     savedUser.getUsername(),
                     savedUser.getEmail()
             );
@@ -88,10 +86,5 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new AuthResponseDTO(false, "Error interno del servidor"));
         }
-    }
-
-    public ResponseEntity<AuthResponseDTO> logout(String token) {
-        // Implementar más tarde. Igual lo tiene que hacer el front?
-        return ResponseEntity.ok(new AuthResponseDTO(true, "Logout pendiente de implementar"));
     }
 }
