@@ -76,7 +76,8 @@ public class SearchService {
             validateSearchData(name);
 
             List<Media> result = new ArrayList<>();
-            name = name.replace("\\s+", "+");
+
+            name = name.replaceAll("\\s+", "+"); // probably useless
 
             JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
             
@@ -127,6 +128,10 @@ public class SearchService {
                 json.getString("Title"),
                 json.getString("Poster")
             );
+
+                MediaLocation[] locations = media.getScrapper().getLocations();
+                media.setLocations(locations);
+
 
             media.setPlot(json.getString("Plot"));
             media.setStarcast(json.getString("Actors").split(", "));

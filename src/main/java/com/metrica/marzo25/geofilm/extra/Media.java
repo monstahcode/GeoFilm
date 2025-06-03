@@ -18,7 +18,7 @@ public class Media {
 	
 	private Scrapper scrapperInstance;
 	private String plot;
-	public MediaLocation[] locations;
+	private MediaLocation[] locations;
 	private String[] starCast;
 	
 	public Media(String id, String title, String posterURL) {
@@ -53,6 +53,10 @@ public class Media {
 	
 	public void setStarcast(String[] starCast) {
 		this.starCast = starCast;
+	}
+	
+	public void setLocations(MediaLocation[] locations) {
+		this.locations = locations;
 	}
 	
 	public class Scrapper {
