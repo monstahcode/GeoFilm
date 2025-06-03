@@ -40,7 +40,7 @@ public class SearchService {
             if(json.has("Search")) {
             	JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
 
-                for (int i = 0; i < Math.min(searchResults.length(), 5); i++) {
+                for (int i = 0; i < searchResults.length(); i++) {
                     JSONObject found = searchResults.getJSONObject(i);
                     result.add(new Media(found.getString("imdbID"), found.getString("Title"), found.getString("Poster")));
                 }
@@ -99,9 +99,8 @@ public class SearchService {
                 media.setPlot(json.getString("Plot"));
                 media.setStarcast(json.getString("Actors").split(", "));
 
-                // Explicitly fetch and set locations
                 MediaLocation[] locations = media.getScrapper().getLocations();
-                media.locations = locations; // Ensure the locations field is set
+                media.setLocations(locations);
 
                 return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
             } else {
