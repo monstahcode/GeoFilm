@@ -17,6 +17,9 @@ public class MediaLocation {
 	
 	private static final String CRDS_APICALL_FORMAT = "https://nominatim.openstreetmap.org/search?q=%s&format=json";
 	
+	private static final String LOCATIONIQ_TOKEN = "pk.37403ee175030047015b20b8c56abe7b";
+	private static final String CRDS_API2CALL_FORMAT = "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json";
+	
 	public MediaLocation(String original, String fictional) {
 		this.original = original;
 		this.fictional = fictional;
@@ -39,7 +42,7 @@ public class MediaLocation {
 	
 	private double[] fetchCoordenates() throws IOException {
 		String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
-	    String urlStr = String.format(CRDS_APICALL_FORMAT, encodedQuery);
+	    String urlStr = String.format(CRDS_API2CALL_FORMAT, encodedQuery, LOCATIONIQ_TOKEN);
 	    URL url = new URL(urlStr);
 	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 

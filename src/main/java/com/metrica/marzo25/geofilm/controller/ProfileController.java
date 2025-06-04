@@ -29,17 +29,18 @@ public class ProfileController {
 		this.service = service;
 	}
 	
-	@GetMapping("/email")
+	// changed to Post
+	@PostMapping("/email")
 	public Optional<User> getByEmail(@RequestBody String email){
 		return service.getByEmail(email);
 	}
 	
-	@GetMapping("/id")
+	@PostMapping("/id")
 	public Optional<User> getById(@RequestBody Long id){
 		return service.getById(id);
 	}
 	
-	@GetMapping("/favlocs/list")
+	@PostMapping("/favlocs/list")
     public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody Long id) {
         return service.getFavouriteLocs(id);
     }
