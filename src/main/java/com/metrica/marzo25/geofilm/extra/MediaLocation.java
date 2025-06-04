@@ -42,7 +42,7 @@ public class MediaLocation {
 	
 	private double[] fetchCoordenates() throws IOException {
 		String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
-	    String urlStr = String.format(CRDS_API2CALL_FORMAT, encodedQuery, LOCATIONIQ_TOKEN);
+	    String urlStr = String.format(CRDS_API2CALL_FORMAT, LOCATIONIQ_TOKEN, encodedQuery);
 	    URL url = new URL(urlStr);
 	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
