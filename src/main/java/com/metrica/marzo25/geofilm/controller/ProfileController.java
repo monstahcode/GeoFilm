@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,6 @@ public class ProfileController {
 		this.service = service;
 	}
 	
-	// changed to Post
 	@PostMapping("/email")
 	public Optional<User> getByEmail(@RequestBody String email){
 		return service.getByEmail(email);
@@ -40,16 +40,20 @@ public class ProfileController {
 		return service.getById(id);
 	}
 	
-	@PostMapping("/favlocs/list")
-    public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody Long id) {
-        return service.getFavouriteLocs(id);
+	@PostMapping("/favlocs/add")
+    public ResponseEntity<FavouriteLocsResponseDTO> addFavoriteLocation(@RequestBody String email, @RequestBody Double[] crds) {
+        return service.addFavouriteLocs(email, crds);
     }
 	
+	@DeleteMapping("/favlocs/remove")
+    public ResponseEntity<FavouriteLocsResponseDTO> removeFavoriteLocation(@RequestBody String email, @RequestBody Double[] crds) {
+        return service.removeFavouriteLocs(email, crds);
+    }
 	
-	@PostMapping
-	public User saveLocation(@RequestBody User user, @RequestBody Location location) {
-		return service.saveUserLocation(user, location);
-	}
+	@PostMapping("/favlocs/list")
+    public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody String email) {
+        return service.getFavouriteLocs(email);
+    }
 	
 	public User saveUser(User user) {
 		return service.saveUser(user);
