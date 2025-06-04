@@ -29,7 +29,7 @@ public class SearchService {
     private static final String SEARCH_FORMAT = "https://www.omdbapi.com/?s=%s&apikey=%s";
     private static final String IDSEARCH_FORMAT = "http://www.omdbapi.com/?i=%s&apikey=%s";
 
-    public ResponseEntity<SearchResponseDTO> searchMedia(SearchRequestDTO request) throws ExternalApiException, IOException {
+    public ResponseEntity<SearchResponseDTO> searchMediaByName(SearchRequestDTO request) throws ExternalApiException, IOException {
     	String name = request.getSeachData();
     	validateSearchData(name);
 
@@ -84,7 +84,7 @@ public class SearchService {
     	return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(result));
     }
     
-    public ResponseEntity<SearchResponseDTO> idSearchMedia(SearchRequestDTO request) throws IOException, InterruptedException {
+    public ResponseEntity<SearchResponseDTO> searchMediaById(SearchRequestDTO request) throws IOException, InterruptedException {
     	String id = request.getSeachData();
     	validateSearchData(id);
 

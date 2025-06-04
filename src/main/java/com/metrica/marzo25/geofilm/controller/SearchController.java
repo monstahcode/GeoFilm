@@ -11,28 +11,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/search")
+@RequestMapping("/api/v1/media/search")
 @CrossOrigin(origins = "http://localhost:4200")
 public class SearchController {
 
-    private final SearchService searchService;
+    private final SearchService service;
 
     public SearchController(SearchService searchService) {
-        this.searchService = searchService;
+        this.service = searchService;
     }
 
-    @PostMapping("/media")
+    @PostMapping("/name")
     public ResponseEntity<SearchResponseDTO> searchMedia(@RequestBody SearchRequestDTO request) throws ExternalApiException, IOException {
-        return searchService.searchMedia(request);
+        return service.searchMediaByName(request);
     }
     
-    @PostMapping("/preview")
+    @PostMapping("/predict/name")
     public ResponseEntity<SearchResponseDTO> searchPreview(@RequestBody SearchRequestDTO request) throws ExternalApiException, IOException {
-    	return searchService.predictedSearchMedia(request);
+    	return service.predictedSearchMedia(request);
     }
     
     @PostMapping("/id")
     public ResponseEntity<SearchResponseDTO> searchById(@RequestBody SearchRequestDTO request) throws IOException, InterruptedException {
-    	return searchService.idSearchMedia(request);
+    	return service.searchMediaById(request);
     }
 }

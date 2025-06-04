@@ -1,10 +1,14 @@
 package com.metrica.marzo25.geofilm.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.metrica.marzo25.geofilm.dto.response.FavouriteLocsResponseDTO;
+import com.metrica.marzo25.geofilm.dto.response.LocationDTO;
 import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
 import com.metrica.marzo25.geofilm.exception.UserNotFoundException;
@@ -62,4 +66,22 @@ public class UserService {
         return getById(id)
                 .orElseThrow(() -> new UserNotFoundException("No se encontró usuario con ID: " + id));
     }
+    
+    public ResponseEntity<FavouriteLocsResponseDTO> getFavouriteLocs(Long id) {
+    	User user = getByIdOrThrow(id);
+    	List<LocationDTO> favouriteLocations = user.getFavoriteLocations().stream().map(favLoc -> new LocationDTO(
+    			favLoc.getName(), favLoc.getAddress(),
+    			favLoc.getFictionalAddress(), favLoc.getLatitude(),
+    			favLoc.getLongitude()
+		)).toList();
+    	
+    	return ResponseEntity.ok(
+    			new FavouriteLocsResponseDTO(
+						user.getEmail(),
+						favouriteLocations
+						
+				)
+		);
+    }
+    
 }

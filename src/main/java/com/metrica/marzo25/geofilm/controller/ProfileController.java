@@ -3,6 +3,7 @@ package com.metrica.marzo25.geofilm.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.metrica.marzo25.geofilm.dto.response.FavouriteLocsResponseDTO;
 import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
+import com.metrica.marzo25.geofilm.extra.MediaLocation;
 import com.metrica.marzo25.geofilm.service.UserService;
 
 @RestController
@@ -27,7 +30,7 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/email")
-	public Optional<User> getByEmeail(@RequestBody String email){
+	public Optional<User> getByEmail(@RequestBody String email){
 		return service.getByEmail(email);
 	}
 	
@@ -35,6 +38,12 @@ public class ProfileController {
 	public Optional<User> getById(@RequestBody Long id){
 		return service.getById(id);
 	}
+	
+	@GetMapping("/favlocs/list")
+    public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody Long id) {
+        return service.getFavouriteLocs(id);
+    }
+	
 	
 	@PostMapping
 	public User saveLocation(@RequestBody User user, @RequestBody Location location) {
