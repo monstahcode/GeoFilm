@@ -55,6 +55,10 @@ public class Media {
 		this.starCast = starCast;
 	}
 	
+	public MediaLocation[] getLocations() {
+		return this.locations;
+	}
+	
 	public void setLocations(MediaLocation[] locations) {
 		this.locations = locations;
 	}
