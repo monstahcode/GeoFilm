@@ -3,6 +3,8 @@ package com.metrica.marzo25.geofilm.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.metrica.marzo25.geofilm.dto.response.LocationDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,9 +21,6 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
 
     @Column(name = "address", length = 255)
     private String address;
@@ -42,13 +41,18 @@ public class Location {
     // Constructores
     public Location() {}
 
-    public Location(String name, String address, String city, String country) {
-        this.name = name;
+    public Location(LocationDTO locationData) {
+    	this.address = locationData.getAddress();
+    	this.fictionalAddress = locationData.getFictionalAddress();
+        this.latitude = locationData.getLatitude();
+        this.longitude = locationData.getLongitude();
+    }
+
+    public Location(String address) {
         this.address = address;
     }
 
-    public Location(String name, Double latitude, Double longitude) {
-        this.name = name;
+    public Location(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -61,14 +65,6 @@ public class Location {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getAddress() {
