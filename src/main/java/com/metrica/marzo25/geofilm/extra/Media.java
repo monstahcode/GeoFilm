@@ -47,10 +47,6 @@ public class Media {
 		return this.posterURL;
 	}
 	
-	public MediaLocation[] getLocations() {
-		return this.locations;
-	}
-	
 	public void setPlot(String plot) {
 		this.plot = plot;
 	}

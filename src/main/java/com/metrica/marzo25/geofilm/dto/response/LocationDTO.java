@@ -1,7 +1,6 @@
 package com.metrica.marzo25.geofilm.dto.response;
 
 public class LocationDTO {
-	private String name;
     private String address;
     private String fictionalAddress;
     private Double latitude;
@@ -9,20 +8,11 @@ public class LocationDTO {
 
     public LocationDTO() {}
 
-    public LocationDTO(String name, String address, String fictionalAddress, Double latitude, Double longitude) {
-        this.name = name;
+    public LocationDTO(String address, String fictionalAddress, Double latitude, Double longitude) {
         this.address = address;
         this.fictionalAddress = fictionalAddress;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {
