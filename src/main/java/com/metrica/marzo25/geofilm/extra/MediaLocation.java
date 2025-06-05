@@ -15,12 +15,8 @@ public class MediaLocation {
 	private String fictional;
 	private double[] crds;
 	
-	private static final String CRDS_APICALL_FORMAT = "https://nominatim.openstreetmap.org/search?q=%s&format=json";
-	
-	//private static final String LOCATIONIQ_TOKEN = "pk.37403ee175030047015b20b8c56abe7b";
-	//private static final String CRDS_API2CALL_FORMAT = "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json";
 	private static final String key = "Kxlt8h51loNpnto2qrAxC0WkQ3GIVL4OQK0OYxZU71Dm4OysImLkoYKzeh8tdaMJ";
-	private static final String CRDS_API3CALL_FORMAT = "https://api.distancematrix.ai/maps/api/geocode/json?address=%s&key=%s";
+	private static final String CRDS_APICALL_FORMAT = "https://api.distancematrix.ai/maps/api/geocode/json?address=%s&key=%s";
 	
 	
 	public MediaLocation(String original, String fictional) {
@@ -38,14 +34,14 @@ public class MediaLocation {
 	
 	public double[] getCoordenates() throws IOException {
 		if(crds == null)
-			crds = fetchCoordenates2();
+			crds = fetchCoordenates();
 		
 		return crds;
 	}
 	
-	private double[] fetchCoordenates2() throws IOException {
+	private double[] fetchCoordenates() throws IOException {
 	    String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
-	    String urlStr = String.format(CRDS_API3CALL_FORMAT, encodedQuery, key);
+	    String urlStr = String.format(CRDS_APICALL_FORMAT, encodedQuery, key);
 	    URL url = new URL(urlStr);
 	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -86,41 +82,6 @@ public class MediaLocation {
 	    double[] crds = new double[2];
 	    crds[0] = lat;
 	    crds[1] = lng;
-
-	    return crds;
-	}
-	
-	private double[] fetchCoordenates() throws IOException {
-		String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
-	    String urlStr = String.format(CRDS_APICALL_FORMAT, encodedQuery);
-	    URL url = new URL(urlStr);
-	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-	    connection.setRequestMethod("GET");
-	    connection.setRequestProperty("Accept", "application/json");
-	    connection.setRequestProperty("User-Agent", "JavaApp/1.0 (IvanR05)");
-
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	    StringBuilder response = new StringBuilder();
-	    String inputLine;
-
-	    while((inputLine = in.readLine()) != null) {
-	        response.append(inputLine);
-	    }
-	    in.close();
-
-	    JSONArray arr = new JSONArray(response.toString());
-	    if(arr.length() == 0) {
-	        System.out.println("No coordinates found for: " + original);
-	        return null;
-	    }
-	    
-	    JSONObject obj = arr.getJSONObject(0);
-	    double lat = Double.parseDouble(obj.getString("lat"));
-	    double lon = Double.parseDouble(obj.getString("lon"));
-	    double[] crds = new double[2];
-	    crds[0] = lat;
-	    crds[1] = lon;
 
 	    return crds;
 	}
