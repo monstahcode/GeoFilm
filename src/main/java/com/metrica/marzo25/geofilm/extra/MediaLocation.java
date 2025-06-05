@@ -17,6 +17,9 @@ public class MediaLocation {
 	
 	private static final String CRDS_APICALL_FORMAT = "https://nominatim.openstreetmap.org/search?q=%s&format=json";
 	
+	//private static final String LOCATIONIQ_TOKEN = "pk.37403ee175030047015b20b8c56abe7b";
+	//private static final String CRDS_API2CALL_FORMAT = "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json";
+	
 	public MediaLocation(String original, String fictional) {
 		this.original = original;
 		this.fictional = fictional;
