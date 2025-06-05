@@ -6,16 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.metrica.marzo25.geofilm.dto.request.FavouriteLocsRequestDTO;
+import com.metrica.marzo25.geofilm.dto.request.UserFavouriteLocsRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.FavouriteLocsResponseDTO;
-import com.metrica.marzo25.geofilm.entity.Location;
 import com.metrica.marzo25.geofilm.entity.User;
-import com.metrica.marzo25.geofilm.extra.MediaLocation;
 import com.metrica.marzo25.geofilm.service.UserService;
 
 @RestController
@@ -41,18 +40,18 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/favlocs/add")
-    public ResponseEntity<FavouriteLocsResponseDTO> addFavoriteLocation(@RequestBody String email, @RequestBody Double[] crds) {
-        return service.addFavouriteLocs(email, crds);
+    public ResponseEntity<FavouriteLocsResponseDTO> addFavoriteLocation(@RequestBody FavouriteLocsRequestDTO request) {
+        return service.addFavouriteLocs(request);
     }
 	
 	@DeleteMapping("/favlocs/remove")
-    public ResponseEntity<FavouriteLocsResponseDTO> removeFavoriteLocation(@RequestBody String email, @RequestBody Double[] crds) {
-        return service.removeFavouriteLocs(email, crds);
+    public ResponseEntity<FavouriteLocsResponseDTO> removeFavoriteLocation(@RequestBody FavouriteLocsRequestDTO request) {
+        return service.removeFavouriteLocs(request);
     }
 	
 	@PostMapping("/favlocs/list")
-    public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody String email) {
-        return service.getFavouriteLocs(email);
+    public ResponseEntity<FavouriteLocsResponseDTO> getFavoriteLocations(@RequestBody UserFavouriteLocsRequestDTO request) {
+        return service.getFavouriteLocs(request);
     }
 	
 	public User saveUser(User user) {

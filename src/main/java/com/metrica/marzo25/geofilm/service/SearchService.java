@@ -101,17 +101,16 @@ public class SearchService {
     			);
 
     	MediaLocation[] locations = media.getScrapper().getLocations();
+    	for (MediaLocation mLoc : locations) {
+    		mLoc.getCoordenates();
+    	}
+    	
     	media.setLocations(locations);
-
 
     	media.setPlot(json.getString("Plot"));
     	media.setStarcast(json.getString("Actors").split(", "));
 
-    	// Obtener coordenadas de las ubicaciones
-    	for (MediaLocation mLoc : media.getScrapper().getLocations()) {
-    		mLoc.getCoordenates();
-    	}
-
+    	System.out.println(">>> Returning MEDIA: " + media + " <<<");
     	return ResponseEntity.status(HttpStatus.OK).body(new SearchResponseDTO(List.of(media)));
     }
     

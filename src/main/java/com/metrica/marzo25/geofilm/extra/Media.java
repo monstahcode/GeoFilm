@@ -47,16 +47,16 @@ public class Media {
 		return this.posterURL;
 	}
 	
-	public MediaLocation[] getLocations() {
-		return this.locations;
-	}
-	
 	public void setPlot(String plot) {
 		this.plot = plot;
 	}
 	
 	public void setStarcast(String[] starCast) {
 		this.starCast = starCast;
+	}
+	
+	public MediaLocation[] getLocations() {
+		return this.locations;
 	}
 	
 	public void setLocations(MediaLocation[] locations) {

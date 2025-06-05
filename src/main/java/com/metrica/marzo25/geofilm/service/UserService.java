@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.metrica.marzo25.geofilm.dto.request.FavouriteLocsRequestDTO;
+import com.metrica.marzo25.geofilm.dto.request.UserFavouriteLocsRequestDTO;
 import com.metrica.marzo25.geofilm.dto.response.FavouriteLocsResponseDTO;
 import com.metrica.marzo25.geofilm.dto.response.LocationDTO;
 import com.metrica.marzo25.geofilm.entity.Location;
@@ -58,10 +60,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("No se encontró usuario con ID: " + id));
     }
     
-    public ResponseEntity<FavouriteLocsResponseDTO> getFavouriteLocs(String email) {
-    	User user = getByEmailOrThrow(email);
+    public ResponseEntity<FavouriteLocsResponseDTO> getFavouriteLocs(UserFavouriteLocsRequestDTO request) {
+    	User user = getByEmailOrThrow(request.getUserEmail());
     	List<LocationDTO> favouriteLocations = user.getFavoriteLocations().stream().map(favLoc -> new LocationDTO(
-    			favLoc.getName(), favLoc.getAddress(),
+    			favLoc.getAddress(),
     			favLoc.getFictionalAddress(), favLoc.getLatitude(),
     			favLoc.getLongitude()
 		)).toList();
@@ -74,62 +76,62 @@ public class UserService {
 		);
     }
     
-    public ResponseEntity<FavouriteLocsResponseDTO> addFavouriteLocs(String email, Double[] crds) {
-        if(crds == null || crds.length != 2)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<FavouriteLocsResponseDTO> addFavouriteLocs(FavouriteLocsRequestDTO request) {
+    	if(request.getLocationData().getLatitude() == null || request.getLocationData().getLongitude() == null) {
+    		throw new IllegalArgumentException("Coordenadas no válidas");
+    	}
 
-        try {
-            User user = getByEmailOrThrow(email);
-            Location location = locationRepository.findAll().stream()
-                .filter(loc -> loc.getLatitude().equals(crds[0]) && loc.getLongitude().equals(crds[1]))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Ubicación no encontrada para las coordenadas dadas"));
+    	User user = getByEmailOrThrow(request.getEmail());
+   
+    	Optional<Location> locationOpt = locationRepository.findAll().stream()
+    			.filter(loc -> loc.getLatitude().equals(request.getLocationData().getLatitude()) && loc.getLongitude().equals(request.getLocationData().getLongitude()))
+    			.findFirst();
+    	
+    	Location location;
+    	if (!locationOpt.isPresent()) {
+    		location = new Location(request.getLocationData());
+    	} else {
+    		location = locationOpt.get();
+    	}
+   		user.addFavoriteLocation(location);
 
-            user.addFavoriteLocation(location);
-            repository.save(user);
+    	repository.save(user);
 
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-            		new FavouriteLocsResponseDTO(user.getEmail(), List.of(new LocationDTO(
-	            		location.getName(),
-	            		location.getAddress(),
-	            		location.getFictionalAddress(),
-	            		location.getLatitude(),
-	            		location.getLongitude()
-	            		)
-            		))
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    	return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+    			new FavouriteLocsResponseDTO(user.getEmail(), List.of(new LocationDTO(
+    					location.getAddress(),
+    					location.getFictionalAddress(),
+    					location.getLatitude(),
+    					location.getLongitude()
+   					)
+    			)
+  			)
+    	);
     }
 
-    public ResponseEntity<FavouriteLocsResponseDTO> removeFavouriteLocs(String email, Double[] crds) {
-        if(crds == null || crds.length != 2)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<FavouriteLocsResponseDTO> removeFavouriteLocs(FavouriteLocsRequestDTO request) {
+    	if(request.getLocationData().getLatitude() == null || request.getLocationData().getLongitude() == null) {
+    		throw new IllegalArgumentException("Coordenadas no válidas");
+    	}
 
-        try {
-            User user = getByEmailOrThrow(email);
-            Location location = user.getFavoriteLocations().stream()
-                .filter(loc -> loc.getLatitude().equals(crds[0]) && loc.getLongitude().equals(crds[1]))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Ubicación no encontrada en los favoritos del usuario"));
+    	User user = getByEmailOrThrow(request.getEmail());
+    	Location location = user.getFavoriteLocations().stream()
+    			.filter(loc -> loc.getLatitude().equals(request.getLocationData().getLatitude()) && loc.getLongitude().equals(request.getLocationData().getLongitude()))
+    			.findFirst()
+    			.orElseThrow(() -> new IllegalArgumentException("Ubicación no encontrada en los favoritos del usuario"));
 
-            user.removeFavoriteLocation(location);
-            repository.save(user);
+    	user.removeFavoriteLocation(location);
+    	repository.save(user);
 
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-            		new FavouriteLocsResponseDTO(user.getEmail(), List.of(new LocationDTO(
-	            		location.getName(),
-	            		location.getAddress(),
-	            		location.getFictionalAddress(),
-	            		location.getLatitude(),
-	            		location.getLongitude()
-	            		)
-            		))
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    	return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+    			new FavouriteLocsResponseDTO(user.getEmail(), List.of(new LocationDTO(
+    					location.getAddress(),
+    					location.getFictionalAddress(),
+    					location.getLatitude(),
+    					location.getLongitude()
+    				)
+   				)
+    		)
+   		);
     }
-    
 }
