@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
 public class SeleniumUtil {
 
@@ -17,15 +18,26 @@ public class SeleniumUtil {
 	private WebDriver driver;
 	
 	private SeleniumUtil() {
-		System.setProperty("webdriver.gecko.driver", "driver/geckodriver.exe");
+        System.setProperty("webdriver.gecko.driver", "driver/geckodriver.exe");
+
+        FirefoxProfile profile = new FirefoxProfile();
+
+        profile.setPreference("permissions.default.image", 2);
+        profile.setPreference("dom.ipc.plugins.enabled.libflashplayer.so", false);
+        profile.setPreference("browser.display.show_image_placeholders", false);
+        profile.setPreference("browser.cache.disk.enable", false);
+        profile.setPreference("browser.cache.memory.enable", false);
+        profile.setPreference("browser.cache.offline.enable", false);
+        profile.setPreference("network.http.use-cache", false);
 
         FirefoxOptions options = new FirefoxOptions();
-        // >>> Reemplaza la linea de abajo por la ruta del .exe de tu firefox <<<
-        options.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+        options.setProfile(profile);
         options.addArguments("-headless");
 
+        options.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+
         driver = new FirefoxDriver(options);
-	}
+    }
 	
 	public static SeleniumUtil getInstance() {
 		if(instance == null)
