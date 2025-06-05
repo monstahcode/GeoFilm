@@ -15,10 +15,9 @@ public class MediaLocation {
 	private String fictional;
 	private double[] crds;
 	
-	private static final String CRDS_APICALL_FORMAT = "https://nominatim.openstreetmap.org/search?q=%s&format=json";
+	private static final String key = "Kxlt8h51loNpnto2qrAxC0WkQ3GIVL4OQK0OYxZU71Dm4OysImLkoYKzeh8tdaMJ";
+	private static final String CRDS_APICALL_FORMAT = "https://api.distancematrix.ai/maps/api/geocode/json?address=%s&key=%s";
 	
-	//private static final String LOCATIONIQ_TOKEN = "pk.37403ee175030047015b20b8c56abe7b";
-	//private static final String CRDS_API2CALL_FORMAT = "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json";
 	
 	public MediaLocation(String original, String fictional) {
 		this.original = original;
@@ -41,8 +40,8 @@ public class MediaLocation {
 	}
 	
 	private double[] fetchCoordenates() throws IOException {
-		String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
-	    String urlStr = String.format(CRDS_APICALL_FORMAT, encodedQuery);
+	    String encodedQuery = URLEncoder.encode(original, StandardCharsets.UTF_8);
+	    String urlStr = String.format(CRDS_APICALL_FORMAT, encodedQuery, key);
 	    URL url = new URL(urlStr);
 	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -54,23 +53,35 @@ public class MediaLocation {
 	    StringBuilder response = new StringBuilder();
 	    String inputLine;
 
-	    while((inputLine = in.readLine()) != null) {
+	    while ((inputLine = in.readLine()) != null) {
 	        response.append(inputLine);
 	    }
 	    in.close();
 
-	    JSONArray arr = new JSONArray(response.toString());
-	    if(arr.length() == 0) {
+	    
+	    JSONObject responseObj = new JSONObject(response.toString());
+	    String status = responseObj.getString("status");
+
+	    if (!"OK".equals(status)) {
+	        System.out.println("Failed to fetch coordinates. Status: " + status);
+	        return null;
+	    }
+
+	    JSONArray results = responseObj.getJSONArray("result");
+	    if (results.length() == 0) {
 	        System.out.println("No coordinates found for: " + original);
 	        return null;
 	    }
-	    
-	    JSONObject obj = arr.getJSONObject(0);
-	    double lat = Double.parseDouble(obj.getString("lat"));
-	    double lon = Double.parseDouble(obj.getString("lon"));
+
+	    JSONObject geometry = results.getJSONObject(0).getJSONObject("geometry");
+	    JSONObject location = geometry.getJSONObject("location");
+
+	    double lat = location.getDouble("lat");
+	    double lng = location.getDouble("lng");
+
 	    double[] crds = new double[2];
 	    crds[0] = lat;
-	    crds[1] = lon;
+	    crds[1] = lng;
 
 	    return crds;
 	}
