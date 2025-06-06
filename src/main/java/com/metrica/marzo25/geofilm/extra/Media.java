@@ -82,7 +82,6 @@ public class Media {
 		    Document doc = SeleniumUtil.getInstance().getExpandedLocationDocument(Media.this.id);
 		    
 		    if (doc != null) {
-		        // Usar el selector más específico para localizaciones
 		        for(Element elem : doc.select("a[data-testid='item-text-with-link']")) {
 		            Element nextElem = elem.nextElementSibling();
 		            String filmLoc = "";

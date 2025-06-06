@@ -10,12 +10,10 @@ import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.metrica.marzo25.geofilm.service.UserService;
 
 public class MediaLocation {
 	private String original;
 	private String fictional;
-	private boolean isFavourite;
 	private double[] crds;
 	
 	private static final String key = "jCs5nBWZrfCVwOYHLiREReiLR4GZ6xMuGuYISVAsS92th6kpeJo3SRnLksmIV2T7";
@@ -89,15 +87,6 @@ public class MediaLocation {
 	    return coordenates;
 	}
 	
-	
-
-	public boolean isFavourite() {
-		return isFavourite;
-	}
-
-	public void setFavourite(boolean isFavourite) {
-		this.isFavourite = isFavourite;
-	}
 
 	@Override
 	public String toString() {
