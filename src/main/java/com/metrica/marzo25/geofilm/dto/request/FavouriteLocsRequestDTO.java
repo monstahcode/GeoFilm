@@ -7,21 +7,17 @@ public class FavouriteLocsRequestDTO {
     private String email;
     private LocationDTO locationData;
     
-    // Constructor por defecto
     public FavouriteLocsRequestDTO() {}
     
-    // Constructor con parámetros
     public FavouriteLocsRequestDTO(String email, LocationDTO locationData) {
         this.email = email;
         this.locationData = locationData;
     }
     
-    // Constructor solo con email (para el método getFavoriteLocations)
     public FavouriteLocsRequestDTO(String email) {
         this.email = email;
     }
     
-    // Getters y Setters
     public String getEmail() {
         return email;
     }

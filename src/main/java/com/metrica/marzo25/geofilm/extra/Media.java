@@ -4,13 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.metrica.marzo25.geofilm.exception.MediaSearchException;
 
 public class Media {
 	private final String id;
@@ -48,6 +44,10 @@ public class Media {
 		return this.posterURL;
 	}
 	
+	public MediaLocation[] getLocations() {
+		return this.locations;
+	}
+	
 	public void setPlot(String plot) {
 		this.plot = plot;
 	}
@@ -56,12 +56,12 @@ public class Media {
 		this.starCast = starCast;
 	}
 	
-	public MediaLocation[] getLocations() {
-		return this.locations;
-	}
-	
 	public void setLocations(MediaLocation[] locations) {
 		this.locations = locations;
+	}
+	
+	public String[] getStarCast() {
+		return this.starCast;
 	}
 	
 	public class Scrapper {

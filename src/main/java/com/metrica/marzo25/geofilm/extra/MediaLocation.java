@@ -10,14 +10,16 @@ import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.metrica.marzo25.geofilm.service.UserService;
+
 public class MediaLocation {
 	private String original;
 	private String fictional;
+	private boolean isFavourite;
 	private double[] crds;
 	
 	private static final String key = "jCs5nBWZrfCVwOYHLiREReiLR4GZ6xMuGuYISVAsS92th6kpeJo3SRnLksmIV2T7";
 	private static final String CRDS_APICALL_FORMAT = "https://api.distancematrix.ai/maps/api/geocode/json?address=%s&key=%s";
-	
 	
 	public MediaLocation(String original, String fictional) {
 		this.original = original;
@@ -79,11 +81,22 @@ public class MediaLocation {
 	    double lat = location.getDouble("lat");
 	    double lng = location.getDouble("lng");
 
-	    double[] crds = new double[2];
-	    crds[0] = lat;
-	    crds[1] = lng;
+	    double[] coordenates = new double[2];
+	    coordenates[0] = lat;
+	    coordenates[1] = lng;
+	    
+	    
+	    return coordenates;
+	}
+	
+	
 
-	    return crds;
+	public boolean isFavourite() {
+		return isFavourite;
+	}
+
+	public void setFavourite(boolean isFavourite) {
+		this.isFavourite = isFavourite;
 	}
 
 	@Override

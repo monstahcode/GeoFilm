@@ -30,7 +30,7 @@ public class SearchService {
     private static final String IDSEARCH_FORMAT = "http://www.omdbapi.com/?i=%s&apikey=%s";
 
     public ResponseEntity<SearchResponseDTO> searchMediaByName(SearchRequestDTO request) throws ExternalApiException, IOException {
-    	String name = request.getSeachData();
+    	String name = request.getSearchData();
     	validateSearchData(name);
 
     	List<Media> result = new ArrayList<>();
@@ -39,7 +39,7 @@ public class SearchService {
     	JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
 
     	if (!json.has("Search")) {
-    		throw new MediaSearchException("No se encontraron resultados para: " + request.getSeachData());
+    		throw new MediaSearchException("No se encontraron resultados para: " + request.getSearchData());
     	}
 
     	JSONArray searchResults = json.getJSONArray("Search");
@@ -57,17 +57,17 @@ public class SearchService {
     }
     
     public ResponseEntity<SearchResponseDTO> predictedSearchMedia(SearchRequestDTO request) throws ExternalApiException, IOException {
-    	String name = request.getSeachData();
+    	String name = request.getSearchData();
     	validateSearchData(name);
 
     	List<Media> result = new ArrayList<>();
 
-    	name = name.replaceAll("\\s+", "+"); // probably useless
+    	name = name.replaceAll("\\s+", "+");
 
     	JSONObject json = getJSONMedia(String.format(SEARCH_FORMAT, name, OMDB_APIKEY));
 
     	if (!json.has("Search")) {
-    		throw new MediaSearchException("No se encontraron resultados para: " + request.getSeachData());
+    		throw new MediaSearchException("No se encontraron resultados para: " + request.getSearchData());
     	}
 
     	JSONArray searchResults = json.getJSONArray("Search");
@@ -85,7 +85,7 @@ public class SearchService {
     }
     
     public ResponseEntity<SearchResponseDTO> searchMediaById(SearchRequestDTO request) throws IOException, InterruptedException {
-    	String id = request.getSeachData();
+    	String id = request.getSearchData();
     	validateSearchData(id);
 
     	JSONObject json = getJSONMedia(String.format(IDSEARCH_FORMAT, id, OMDB_APIKEY));

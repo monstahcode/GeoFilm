@@ -10,7 +10,7 @@ public class SearchRequestDTO {
 		this.searchData = searchData;
 	}
 
-	public String getSeachData() {
+	public String getSearchData() {
 		return searchData;
 	}
 
