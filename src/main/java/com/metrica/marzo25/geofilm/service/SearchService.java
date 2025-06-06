@@ -19,8 +19,8 @@ import com.metrica.marzo25.geofilm.dto.response.SearchResponseDTO;
 import com.metrica.marzo25.geofilm.exception.ExternalApiException;
 import com.metrica.marzo25.geofilm.exception.InvalidSearchDataException;
 import com.metrica.marzo25.geofilm.exception.MediaSearchException;
-import com.metrica.marzo25.geofilm.extra.Media;
-import com.metrica.marzo25.geofilm.extra.MediaLocation;
+import com.metrica.marzo25.geofilm.media.Media;
+import com.metrica.marzo25.geofilm.media.MediaLocation;
 
 @Service
 public class SearchService {

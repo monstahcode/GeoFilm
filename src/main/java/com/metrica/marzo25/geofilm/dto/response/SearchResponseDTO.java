@@ -2,7 +2,7 @@ package com.metrica.marzo25.geofilm.dto.response;
 
 import java.util.List;
 
-import com.metrica.marzo25.geofilm.extra.Media;
+import com.metrica.marzo25.geofilm.media.Media;
 
 public class SearchResponseDTO {
 

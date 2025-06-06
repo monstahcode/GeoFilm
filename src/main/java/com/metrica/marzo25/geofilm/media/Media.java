@@ -1,4 +1,4 @@
-package com.metrica.marzo25.geofilm.extra;
+package com.metrica.marzo25.geofilm.media;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +46,10 @@ public class Media {
 	
 	public MediaLocation[] getLocations() {
 		return this.locations;
+	}
+		
+	public String getPlot() {
+		return this.plot;
 	}
 	
 	public void setPlot(String plot) {

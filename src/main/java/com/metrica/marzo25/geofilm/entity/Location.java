@@ -25,7 +25,7 @@ public class Location {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "fictional_address", nullable = false, length = 50)
+    @Column(name = "fictional_address", nullable = false, length = 255)
     private String fictionalAddress;
 
     @Column(name = "latitude")

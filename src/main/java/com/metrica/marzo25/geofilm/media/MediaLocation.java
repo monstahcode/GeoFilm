@@ -1,4 +1,4 @@
-package com.metrica.marzo25.geofilm.extra;
+package com.metrica.marzo25.geofilm.media;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
