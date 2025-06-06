@@ -78,32 +78,29 @@ public class Media {
 		}
 		
 		private MediaLocation[] fetchLocations() throws IOException, InterruptedException {
-			List<MediaLocation> result = new ArrayList<>();
-			Document doc = SeleniumUtil.getInstance().getExpandedLocationDocument(Media.this.id);
-			if (doc == null) {
-				for(Element elem : doc.getElementsByClass("ipc-link--base")) {
-					Element nextElem = elem.nextElementSibling();
-					String filmLoc = "";
-					if (nextElem != null) filmLoc = nextElem.text();
-
-					result.add(new MediaLocation(elem.text(), filmLoc));
-				}
-			
-				if(!result.isEmpty()) result.remove(result.size()-1);
-				return result.toArray(new MediaLocation[0]);
-			}
-			for(Element elem : doc.getElementsByClass("ipc-link--base")) {
-				Element nextElem = elem.nextElementSibling();
-				String filmLoc = "";
-				if (nextElem != null)
-					filmLoc = nextElem.text();
-
-				result.add(new MediaLocation(elem.text(), filmLoc));
-			}
-			
-			if(!result.isEmpty()) result.remove(result.size()-1);
-			return result.toArray(new MediaLocation[0]);
+		    List<MediaLocation> result = new ArrayList<>();
+		    Document doc = SeleniumUtil.getInstance().getExpandedLocationDocument(Media.this.id);
+		    
+		    if (doc != null) {
+		        // Usar el selector más específico para localizaciones
+		        for(Element elem : doc.select("a[data-testid='item-text-with-link']")) {
+		            Element nextElem = elem.nextElementSibling();
+		            String filmLoc = "";
+		            if (nextElem != null) {
+		                filmLoc = nextElem.text();
+		            }
+		            
+		            result.add(new MediaLocation(elem.text(), filmLoc));
+		        }
+		        
+		        if(!result.isEmpty()) {
+//		            result.remove(result.size()-1);
+		        }
+		    }
+		    
+		    return result.toArray(new MediaLocation[0]);
 		}
+
 	}
 	
 	
