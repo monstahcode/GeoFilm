@@ -1,7 +1,4 @@
 package com.metrica.marzo25.geofilm.extra;
-import java.io.IOException;
-import java.util.NoSuchElementException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
@@ -46,7 +43,7 @@ public class SeleniumUtil {
 		return instance;
 	}
 	
-	public Document getExpandedLocationDocument(String id) throws IOException, InterruptedException {
+	public Document getExpandedLocationDocument(String id) throws InterruptedException {
 		String url = "https://www.imdb.com/title/" + id + "/locations";
 
 		driver.get(url);
@@ -57,9 +54,7 @@ public class SeleniumUtil {
 			Thread.sleep(1000);
 			moreButton.click();
 			Thread.sleep(2000);
-		} catch(org.openqa.selenium.NoSuchElementException e) {
-
-		}
+		} catch(org.openqa.selenium.NoSuchElementException e) {}
 
 		String html = driver.getPageSource();
 		return Jsoup.parse(html);

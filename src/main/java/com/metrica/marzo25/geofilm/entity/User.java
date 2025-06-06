@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-// Entidad User
 @Entity
 @Table(name = "user")
 public class User {
@@ -33,7 +32,6 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    // Relación muchos a muchos con Location (localizaciones favoritas)
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_favorite_locations",
@@ -42,7 +40,6 @@ public class User {
     )
     private Set<Location> favoriteLocations;
 
-    // Constructores
     public User() {
     	this.favoriteLocations = new HashSet<>();
     }
@@ -54,7 +51,6 @@ public class User {
         this.favoriteLocations = new HashSet<>();
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -95,7 +91,6 @@ public class User {
         this.favoriteLocations = favoriteLocations;
     }
 
-    // Métodos de conveniencia para manejar favoritos
     public void addFavoriteLocation(Location location) {
         this.favoriteLocations.add(location);
         location.getFavoriteByUsers().add(this);

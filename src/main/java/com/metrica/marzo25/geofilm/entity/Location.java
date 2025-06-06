@@ -34,11 +34,9 @@ public class Location {
     @Column(name = "longitude")
     private Double longitude;
 
-    // Relación muchos a muchos con User (usuarios que tienen esta localización como favorita)
     @ManyToMany(mappedBy = "favoriteLocations", fetch = FetchType.LAZY)
     private Set<User> favoriteByUsers = new HashSet<>();
 
-    // Constructores
     public Location() {}
 
     public Location(LocationDTO locationData) {
@@ -56,8 +54,6 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    
-    // Getters y Setters
    
 	public Long getId() {
 		return id;

@@ -39,7 +39,7 @@ public class Searcher {
 		bR.close();
 		
 		JSONObject json = new JSONObject(content.toString());
-        JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
+        JSONArray searchResults = json.getJSONArray("Search");
         
         for (int i = 0; i < searchResults.length(); i++) {
             JSONObject found = searchResults.getJSONObject(i);
@@ -71,7 +71,7 @@ public class Searcher {
 		bR.close();
 		
 		JSONObject json = new JSONObject(content.toString());
-        JSONArray searchResults = json.getJSONArray("Search"); //TODO Handle if 1k limit is reached
+        JSONArray searchResults = json.getJSONArray("Search");
         
         for (int i = 0; i < limit; i++) {
             JSONObject found = searchResults.getJSONObject(i);
