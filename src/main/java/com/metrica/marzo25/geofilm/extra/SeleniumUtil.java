@@ -47,23 +47,22 @@ public class SeleniumUtil {
 	}
 	
 	public Document getExpandedLocationDocument(String id) throws IOException, InterruptedException {
-        String url = "https://www.imdb.com/title/" + id + "/locations";
+		String url = "https://www.imdb.com/title/" + id + "/locations";
 
-        driver.get(url);
-        Thread.sleep(2000);
+		driver.get(url);
+		Thread.sleep(2000);
+		try {
+			WebElement moreButton = driver.findElement(By.cssSelector(".ipc-see-more__button"));
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", moreButton);
+			Thread.sleep(1000);
+			moreButton.click();
+			Thread.sleep(2000);
+		} catch(org.openqa.selenium.NoSuchElementException e) {
 
-        try {
-            WebElement moreButton = driver.findElement(By.cssSelector(".ipc-see-more__button"));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", moreButton);
-            Thread.sleep(1000);
-            moreButton.click();
-            Thread.sleep(2000);
-        } catch (NoSuchElementException e) {
-            System.out.println("No se encontró el botón 'More Locations'.");
-        }
+		}
 
-        String html = driver.getPageSource();
-        return Jsoup.parse(html);
+		String html = driver.getPageSource();
+		return Jsoup.parse(html);
 	}
 	
 }

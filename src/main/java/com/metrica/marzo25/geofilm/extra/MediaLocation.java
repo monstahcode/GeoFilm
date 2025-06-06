@@ -15,7 +15,7 @@ public class MediaLocation {
 	private String fictional;
 	private double[] crds;
 	
-	private static final String key = "Kxlt8h51loNpnto2qrAxC0WkQ3GIVL4OQK0OYxZU71Dm4OysImLkoYKzeh8tdaMJ";
+	private static final String key = "jCs5nBWZrfCVwOYHLiREReiLR4GZ6xMuGuYISVAsS92th6kpeJo3SRnLksmIV2T7";
 	private static final String CRDS_APICALL_FORMAT = "https://api.distancematrix.ai/maps/api/geocode/json?address=%s&key=%s";
 	
 	

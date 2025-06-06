@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.metrica.marzo25.geofilm.exception.MediaSearchException;
 
 public class Media {
 	private final String id;
@@ -78,9 +79,19 @@ public class Media {
 		
 		private MediaLocation[] fetchLocations() throws IOException, InterruptedException {
 			List<MediaLocation> result = new ArrayList<>();
-			//Document doc = Jsoup.connect(String.format(IMDB_LOC_FORMAT, Media.this.id)).get();
 			Document doc = SeleniumUtil.getInstance().getExpandedLocationDocument(Media.this.id);
+			if (doc == null) {
+				for(Element elem : doc.getElementsByClass("ipc-link--base")) {
+					Element nextElem = elem.nextElementSibling();
+					String filmLoc = "";
+					if (nextElem != null) filmLoc = nextElem.text();
+
+					result.add(new MediaLocation(elem.text(), filmLoc));
+				}
 			
+				if(!result.isEmpty()) result.remove(result.size()-1);
+				return result.toArray(new MediaLocation[0]);
+			}
 			for(Element elem : doc.getElementsByClass("ipc-link--base")) {
 				Element nextElem = elem.nextElementSibling();
 				String filmLoc = "";
