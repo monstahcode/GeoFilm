@@ -92,10 +92,6 @@ public class Media {
 		            
 		            result.add(new MediaLocation(elem.text(), filmLoc));
 		        }
-		        
-		        if(!result.isEmpty()) {
-//		            result.remove(result.size()-1);
-		        }
 		    }
 		    
 		    return result.toArray(new MediaLocation[0]);
