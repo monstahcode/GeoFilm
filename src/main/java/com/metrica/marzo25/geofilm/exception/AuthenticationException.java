@@ -1,7 +1,10 @@
 package com.metrica.marzo25.geofilm.exception;
 
 public class AuthenticationException extends GeoFilmException {
-    public AuthenticationException(String message) {
+
+	private static final long serialVersionUID = -259691059496849119L;
+
+	public AuthenticationException(String message) {
         super(message);
     }
     

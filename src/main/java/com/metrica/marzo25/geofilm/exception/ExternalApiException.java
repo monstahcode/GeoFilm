@@ -1,7 +1,10 @@
 package com.metrica.marzo25.geofilm.exception;
 
 public class ExternalApiException extends GeoFilmException {
-    public ExternalApiException(String message) {
+
+	private static final long serialVersionUID = -3086059524445180300L;
+
+	public ExternalApiException(String message) {
         super(message);
     }
     

@@ -65,9 +65,7 @@ public class Media {
 	}
 	
 	public class Scrapper {
-		private static final String IMDB_MAIN_FORMAT = "https://www.imdb.com/es/title/%s";
-		private static final String IMDB_LOC_FORMAT = "https://www.imdb.com/es/title/%s/locations/";
-	
+
 		public MediaLocation[] getLocations() throws IOException, InterruptedException {
 			if(Media.this.locations == null)
 				Media.this.locations = fetchLocations();

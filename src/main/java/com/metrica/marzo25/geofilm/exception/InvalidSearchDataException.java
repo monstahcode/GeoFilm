@@ -1,7 +1,10 @@
 package com.metrica.marzo25.geofilm.exception;
 
 public class InvalidSearchDataException extends GeoFilmException {
-    public InvalidSearchDataException(String message) {
+
+	private static final long serialVersionUID = -4901252818799334884L;
+
+	public InvalidSearchDataException(String message) {
         super(message);
     }
 }
