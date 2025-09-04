@@ -1,6 +1,6 @@
 # GeoFilm
 
-GeoFilm is a Spring Boot application developed as a small project during a 2-week internship by a team of colleagues. The platform allows users to explore filming locations from movies and TV shows around the world, integrating with external APIs to fetch movie data and using web scraping to extract filming location information <cite />.
+GeoFilm is a Spring Boot application developed as a small project during a 2-weeks in our internship by a team of colleagues. The platform allows users to explore filming locations from movies and TV shows around the world, integrating with external APIs to fetch movie data and using web scraping to extract filming location information <cite />.
 
 ## Project Context
 
